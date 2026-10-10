@@ -14,6 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Shippori Mincho', 'Noto Sans JP', sans-serif;
         }
         .slide-container {
             width: 100%;
@@ -34,24 +35,43 @@
         img.active {
             opacity: 1;
         }
-        .status-badge {
+
+        /* 💬 コメント風メッセージ演出のスタイル */
+        .comment-overlay {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            color: rgba(255, 255, 255, 0.8);
-            font-family: sans-serif;
-            font-size: 14px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 8px 15px;
-            border-radius: 20px;
-            z-index: 10;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: #ffffff;
+            padding: 16px 28px;
+            border-radius: 30px;
+            max-width: 80%;
+            text-align: center;
+            font-size: 1.4rem;
+            letter-spacing: 0.05em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            pointer-events: none;
+        }
+        .comment-overlay.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .comment-overlay.hide {
+            opacity: 0;
+            transform: translateX(-50%) translateY(15px);
         }
     </style>
 </head>
 <body>
 
     <div class="slide-container" id="slideContainer"></div>
-    <div class="status-badge" id="statusBadge">システム接続中...</div>
+    <div id="commentOverlay" class="comment-overlay"></div>
 
     <script>
         // ⚙️ 設定：ご自身の環境に合わせて書き換えてください
@@ -64,6 +84,7 @@
         let useFirstImage = true;
         let slideTimer = null;
         let lastKnownTimestamp = null;
+        let commentTimer = null;
 
         window.onload = async function() {
             const container = document.getElementById('slideContainer');
@@ -108,7 +129,6 @@
 
         async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
             try {
-                // ★【重要】GASの302リダイレクトを確実に追従させるため redirect: "follow" を追加
                 const response = await fetch(GAS_WEB_APP_URL, {
                     method: "GET",
                     redirect: "follow" 
@@ -121,25 +141,23 @@
 
                     if (isInitial) {
                         showImage(currentIndex);
-                        document.getElementById('statusBadge').innerText = `写真総数: ${images.length}枚`;
                     } else if (isInterrupt) {
                         currentIndex = 0;
                         showImage(currentIndex);
-                        document.getElementById('statusBadge').innerText = `✨新着写真を受信！ (総数: ${images.length}枚)`;
                     }
-                } else if (data.status === 'success' && data.images.length === 0) {
-                    document.getElementById('statusBadge').innerText = 'フォルダに写真がありません';
                 }
             } catch (e) {
                 console.error('画像データの取得に失敗しました:', e);
-                document.getElementById('statusBadge').innerText = '通信エラー';
             }
         }
 
         function showImage(index) {
             if (images.length === 0) return;
-            const imageUrl = images[index].url;
+            const currentItem = images[index];
+            const imageUrl = currentItem.url;
+            const message = currentItem.message;
 
+            // 画像切り替え
             if (useFirstImage) {
                 imgElement1.src = imageUrl;
                 imgElement1.classList.add('active');
@@ -150,6 +168,25 @@
                 imgElement1.classList.remove('active');
             }
             useFirstImage = !useFirstImage;
+
+            // メッセージ演出の制御
+            const commentEl = document.getElementById('commentOverlay');
+            clearTimeout(commentTimer);
+
+            if (message && message.trim() !== "") {
+                commentEl.innerText = message;
+                commentEl.classList.remove('hide');
+                commentEl.classList.add('show');
+
+                // 約5秒後にコメントをふわっと消す
+                commentTimer = setTimeout(() => {
+                    commentEl.classList.remove('show');
+                    commentEl.classList.add('hide');
+                }, 5000);
+            } else {
+                commentEl.classList.remove('show');
+                commentEl.classList.add('hide');
+            }
         }
 
         function nextSlide() {
