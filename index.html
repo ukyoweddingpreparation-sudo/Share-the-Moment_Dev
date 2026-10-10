@@ -151,10 +151,18 @@
     .sidebar-menu-item { padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 8px; background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); transition: background 0.2s; }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
 
-    .history-card { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 14px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .history-header { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--primary-gold); margin-bottom: 8px; }
+    /* 📂 ドロップダウン（アコーディオン）式 送信履歴のスタイル */
+    .history-item { background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 14px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s ease; }
+    .history-summary { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: font; cursor: pointer; font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+    .history-summary-left { display: flex; align-items: center; gap: 8px; color: var(--primary-gold); }
+    .history-summary-right { display: flex; align-items: center; gap: 6px; color: var(--text-sub); }
+    .history-dropdown-icon { transition: transform 0.3s ease; color: var(--primary-gold); }
+    .history-item.active .history-dropdown-icon { transform: rotate(180deg); }
+    
+    .history-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0 14px; background: rgba(255, 255, 255, 0.3); border-top: 1px solid transparent; }
+    .history-item.active .history-content { max-height: 500px; padding: 12px 14px 14px; border-top-color: rgba(212, 175, 55, 0.2); }
     .history-thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .history-thumb-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); }
+    .history-thumb-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.8); }
     .history-thumb-item img { width: 100%; height: 100%; object-fit: cover; }
 
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
@@ -292,10 +300,11 @@
       <button class="btn btn-primary" style="margin-top:14px;" onclick="navigate('select', true)">続けてアップロードする</button>
     </div>
 
+    <!-- 📜 履歴画面（ドロップダウン式＆上限解放） -->
     <div id="history-screen">
       <div class="title-area"><span class="en-sub">HISTORY</span><h2>送信履歴</h2></div>
-      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">あなたがこれまでに送信した写真です</p>
-      <div id="history-list-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
+      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">タップすると送信した写真が開きます✨</p>
+      <div id="history-list-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 14px; padding-right: 2px;"></div>
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
@@ -459,26 +468,76 @@
 
     function saveUploadHistory(tableNo, userName, fileDataArray) {
       try {
-        const history = JSON.parse(localStorage.getItem('wedding_history') || '[]'); const now = new Date();
+        const history = JSON.parse(localStorage.getItem('wedding_history') || '[]'); 
+        const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-        history.unshift({ id: Date.now(), date: dateStr, tableNo: tableNo, userName: userName || '匿名', count: fileDataArray.length, thumbnails: fileDataArray.slice(0, 4).map(f => f.base64Data) });
-        if (history.length > 15) history.pop();
+        
+        // 💡 履歴の保存上限を50件に大幅に引き上げ
+        history.unshift({ 
+          id: Date.now(), 
+          date: dateStr, 
+          tableNo: tableNo, 
+          userName: userName || '匿名', 
+          count: fileDataArray.length, 
+          thumbnails: fileDataArray.map(f => f.base64Data) // 全てのサムネイルを保持
+        });
+        
+        if (history.length > 50) history.pop();
         localStorage.setItem('wedding_history', JSON.stringify(history));
       } catch (e) {}
     }
 
+    // 📂 ドロップダウン式の送信履歴レンダリング関数
     function renderHistoryList() {
-      const container = document.getElementById('history-list-container'); container.innerHTML = '';
+      const container = document.getElementById('history-list-container'); 
+      container.innerHTML = '';
       const history = JSON.parse(localStorage.getItem('wedding_history') || '[]');
-      if (history.length === 0) { container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだ送信履歴はありません✨</p>`; return; }
+      
+      if (history.length === 0) {
+        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだ送信履歴はありません✨</p>`; 
+        return;
+      }
+
       history.forEach(item => {
-        const card = document.createElement('div'); card.className = 'history-card';
-        card.innerHTML = `<div class="history-header"><span>✨ ${item.tableNo} (${item.userName})</span><span>${item.date} [全${item.count}枚]</span></div>`;
-        const grid = document.createElement('div'); grid.className = 'history-thumb-grid';
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+
+        // ヘッダー部分（クリックで開閉）
+        const summary = document.createElement('div');
+        summary.className = 'history-summary';
+        summary.innerHTML = `
+          <div class="history-summary-left">
+            <span class="material-symbols-rounded" style="font-size: 1.1rem;">photo_library</span>
+            <span>${item.tableNo} (${item.userName})</span>
+          </div>
+          <div class="history-summary-right">
+            <span>${item.date} [${item.count}枚]</span>
+            <span class="material-symbols-rounded history-dropdown-icon">expand_more</span>
+          </div>
+        `;
+
+        // ドロップダウンの中身（サムネイル一覧）
+        const content = document.createElement('div');
+        content.className = 'history-content';
+        
+        const grid = document.createElement('div');
+        grid.className = 'history-thumb-grid';
         item.thumbnails.forEach(src => {
-          const thumb = document.createElement('div'); thumb.className = 'history-thumb-item'; thumb.innerHTML = `<img src="${src}">`; grid.appendChild(thumb);
+          const thumb = document.createElement('div');
+          thumb.className = 'history-thumb-item';
+          thumb.innerHTML = `<img src="${src}">`;
+          grid.appendChild(thumb);
         });
-        card.appendChild(grid); container.appendChild(card);
+        content.appendChild(grid);
+
+        // クリックイベントでアコーディオン開閉
+        summary.onclick = () => {
+          historyItem.classList.toggle('active');
+        };
+
+        historyItem.appendChild(summary);
+        historyItem.appendChild(content);
+        container.appendChild(historyItem);
       });
     }
 
@@ -576,3 +635,4 @@
   </script>
 </body>
 </html>
+
