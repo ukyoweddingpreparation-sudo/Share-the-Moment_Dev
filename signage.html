@@ -154,23 +154,23 @@
             transform: scale(1.03);
         }
 
-        /* 💬 ライブ配信風 モダン・ラグジュアリーなコメントカプセル */
+        /* 💬 ライブ配信風＋♡マーク付きのラグジュアリー・コメントカプセル */
         .comment-overlay {
             position: absolute;
-            bottom: -100px;
+            /* 画面下部の外からスタート */
+            bottom: -120px;
             left: 50%;
             transform: translateX(-50%);
-            /* 高級感のある上質なすりガラス調ブラック（グラスモーフィズム） */
-            background: rgba(18, 16, 14, 0.82);
+            background: rgba(18, 16, 14, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.45);
             color: #fcfbfa;
-            padding: 20px 36px;
-            border-radius: 50px; /* 美しいピル型（カプセル型） */
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(212, 175, 55, 0.1);
+            padding: 22px 42px 22px 36px;
+            border-radius: 50px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(212, 175, 55, 0.12);
             max-width: 75%;
-            text-align: left; /* 左揃えにしてライブ配信風のチャット感を演出 */
+            text-align: left;
             z-index: 30;
             opacity: 0;
             pointer-events: none;
@@ -179,27 +179,40 @@
             gap: 4px;
         }
 
-        /* 🚀 ライブ配信風のなめらかなフローティング＆フェードアニメーション */
+        /* 💖 右下に配置する小さなハートマーク */
+        .comment-overlay::after {
+            content: '♡';
+            position: absolute;
+            bottom: 14px;
+            right: 20px;
+            font-size: 1.1rem;
+            color: #d4af37;
+            opacity: 0.8;
+            font-family: sans-serif;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+        }
+
+        /* 🚀 下から上へしっかりと昇華していくダイナミックなアニメーション */
         .comment-overlay.animate-stream-comment {
-            animation: streamCommentAscent 9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: streamCommentAscent 9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         @keyframes streamCommentAscent {
             0% {
                 opacity: 0;
-                transform: translateX(-50%) translateY(30px) scale(0.95);
+                transform: translateX(-50%) translateY(40px) scale(0.92);
             }
-            12% {
+            15% {
                 opacity: 1;
-                transform: translateX(-50%) translateY(-30px) scale(1);
+                transform: translateX(-50%) translateY(-40px) scale(1);
             }
-            82% {
+            75% {
                 opacity: 1;
-                transform: translateX(-50%) translateY(-140px) scale(1); /* ゆっくり自然に上へ流れる */
+                transform: translateX(-50%) translateY(-450px) scale(1); /* しっかりと上方向へ昇る */
             }
             100% {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-180px) scale(0.98); /* 上空でフワッと消える */
+                transform: translateX(-50%) translateY(-560px) scale(0.96); /* 上空でエレガントに消える */
             }
         }
 
@@ -215,7 +228,6 @@
             gap: 8px;
         }
 
-        /* 名前の前におしゃれな小さなゴールドのドット（ライブ配信のバッジ風）を配置 */
         .comment-author::before {
             content: '';
             display: inline-block;
@@ -232,7 +244,8 @@
             line-height: 1.5;
             color: #ffffff;
             font-weight: 400;
-            padding-left: 14px; /* ドットの分だけ少しインデント */
+            padding-left: 14px;
+            padding-right: 15px; /* 右下のハートとかぶらないように余白を確保 */
         }
     </style>
 </head>
@@ -455,10 +468,9 @@
             `;
             document.body.appendChild(commentEl);
 
-            // 💡 ライブ配信風のなめらかなフローティングアニメーションを付与
+            // 💡 下から上へしっかりと昇るアニメーションを付与
             commentEl.classList.add('animate-stream-comment');
 
-            // アニメーション完了後にDOMから削除
             setTimeout(() => {
                 commentEl.remove();
             }, 9000);
