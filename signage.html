@@ -5,7 +5,7 @@
     <title>L'Eternel Moment - Wedding Signage</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Shippori+Mincho:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Shippori+Mincho:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
@@ -20,7 +20,6 @@
             font-family: 'Shippori Mincho', serif;
         }
 
-        /* 🚪 起動時ラグジュアリー・スプラッシュ画面（極上のミニマル＆ハイエンドUI） */
         #loadingScreen {
             position: fixed;
             top: 0;
@@ -42,7 +41,6 @@
             pointer-events: none;
         }
 
-        /* 画面を囲む極細のゴールドフレーム（高級感を演出） */
         #loadingScreen::after {
             content: '';
             position: absolute;
@@ -60,7 +58,6 @@
             margin-bottom: 16px;
             font-weight: 400;
             opacity: 0.9;
-            animation: fadeInDown 1.5s ease;
         }
 
         .splash-title {
@@ -71,7 +68,6 @@
             margin-bottom: 20px;
             font-weight: 400;
             text-shadow: 0 4px 30px rgba(0,0,0,0.8);
-            animation: fadeInUp 1.5s ease;
         }
 
         .splash-date {
@@ -81,19 +77,8 @@
             color: #e6c567;
             font-weight: 300;
             opacity: 0.95;
-            animation: fadeInUp 1.8s ease;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 0.9; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 右下の接続中インジケーター */
         .loading-indicator {
             position: absolute;
             bottom: 45px;
@@ -152,7 +137,6 @@
             opacity: 1;
         }
 
-        /* 🔍 スライド画像のズームエフェクト（じんわり拡大しながらフェードイン） */
         img.slide-img {
             max-width: 95%;
             max-height: 95%;
@@ -167,72 +151,88 @@
         }
         img.slide-img.active {
             opacity: 1;
-            transform: scale(1.03); /* 表示中にじんわりズームイン */
+            transform: scale(1.03);
         }
 
-        /* ☁️ 雲の形のメッセージ枠（小幅で優しく波打つアニメーション） */
+        /* 💬 ライブ配信風 モダン・ラグジュアリーなコメントカプセル */
         .comment-overlay {
             position: absolute;
-            bottom: -140px;
+            bottom: -100px;
             left: 50%;
-            background: rgba(22, 20, 18, 0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1.5px solid rgba(212, 175, 55, 0.55);
+            transform: translateX(-50%);
+            /* 高級感のある上質なすりガラス調ブラック（グラスモーフィズム） */
+            background: rgba(18, 16, 14, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             color: #fcfbfa;
-            padding: 28px 48px;
-            border-radius: 70px / 50px;
-            box-shadow: 
-                0 20px 50px rgba(0,0,0,0.7), 
-                inset 0 0 20px rgba(212, 175, 55, 0.2);
-            max-width: 70%;
-            text-align: center;
+            padding: 20px 36px;
+            border-radius: 50px; /* 美しいピル型（カプセル型） */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(212, 175, 55, 0.1);
+            max-width: 75%;
+            text-align: left; /* 左揃えにしてライブ配信風のチャット感を演出 */
             z-index: 30;
             opacity: 0;
             pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .comment-overlay::before,
-        .comment-overlay::after {
-            content: '';
-            position: absolute;
-            background: rgba(22, 20, 18, 0.92);
-            border: 1.5px solid rgba(212, 175, 55, 0.5);
-            border-radius: 50%;
-            z-index: -1;
-        }
-        .comment-overlay::before { width: 80px; height: 80px; top: -30px; left: 40px; }
-        .comment-overlay::after { width: 100px; height: 100px; top: -42px; right: 45px; }
-
-        .comment-overlay.animate-gentle-zigzag {
-            animation: gentleWaveAscent 10s ease-in-out forwards;
+        /* 🚀 ライブ配信風のなめらかなフローティング＆フェードアニメーション */
+        .comment-overlay.animate-stream-comment {
+            animation: streamCommentAscent 9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        @keyframes gentleWaveAscent {
-            0% { opacity: 0; transform: translate(-50%, 0px) scale(0.88); }
-            12% { opacity: 1; transform: translate(-50%, -110px) scale(1); }
-            35% { opacity: 1; transform: translate(calc(-50% + 45px), -320px) scale(1); }
-            65% { opacity: 1; transform: translate(calc(-50% - 40px), -600px) scale(1); }
-            88% { opacity: 0.75; transform: translate(calc(-50% + 20px), -820px) scale(0.96); }
-            100% { opacity: 0; transform: translate(-50%, -960px) scale(0.9); }
+        @keyframes streamCommentAscent {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px) scale(0.95);
+            }
+            12% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-30px) scale(1);
+            }
+            82% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-140px) scale(1); /* ゆっくり自然に上へ流れる */
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-180px) scale(0.98); /* 上空でフワッと消える */
+            }
         }
 
         .comment-author {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
-            letter-spacing: 0.18em;
-            color: #e6c567;
-            margin-bottom: 6px;
+            font-size: 0.95rem;
+            letter-spacing: 0.2em;
+            color: #d4af37;
             text-transform: uppercase;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 名前の前におしゃれな小さなゴールドのドット（ライブ配信のバッジ風）を配置 */
+        .comment-author::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #d4af37;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #d4af37;
         }
 
         .comment-text {
-            font-size: 1.4rem;
-            letter-spacing: 0.08em;
-            line-height: 1.6;
+            font-size: 1.3rem;
+            letter-spacing: 0.06em;
+            line-height: 1.5;
             color: #ffffff;
             font-weight: 400;
+            padding-left: 14px; /* ドットの分だけ少しインデント */
         }
     </style>
 </head>
@@ -263,7 +263,7 @@
         let lastKnownTimestamp = null;
         let isFirstLoad = true;
 
-        const SHOWN_BATCHES_KEY = "wedding_shown_batches_v2";
+        const SHOWN_BATCHES_KEY = "wedding_shown_batches_v3";
         const memoryShownBatches = new Set();
 
         window.onload = async function() {
@@ -442,24 +442,26 @@
 
             if (isFirstTimeForBatch) {
                 markBatchAsShown(batchId);
-                triggerFloatingComment(author, message);
+                triggerStreamComment(author, message);
             }
         }
 
-        function triggerFloatingComment(author, message) {
+        function triggerStreamComment(author, message) {
             const commentEl = document.createElement('div');
             commentEl.className = 'comment-overlay';
             commentEl.innerHTML = `
-                <div class="comment-author">${author ? `${author} 様からのメッセージ` : 'ゲストからのメッセージ'}</div>
+                <div class="comment-author">${author ? `${author}` : 'Guest'}</div>
                 <div class="comment-text">${message}</div>
             `;
             document.body.appendChild(commentEl);
 
-            commentEl.classList.add('animate-gentle-zigzag');
+            // 💡 ライブ配信風のなめらかなフローティングアニメーションを付与
+            commentEl.classList.add('animate-stream-comment');
 
+            // アニメーション完了後にDOMから削除
             setTimeout(() => {
                 commentEl.remove();
-            }, 10000);
+            }, 9000);
         }
 
         function nextSlide() {
