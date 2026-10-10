@@ -127,6 +127,15 @@
             }
         }
 
+        // 配列をランダムにシャッフルする関数（Fisher-Yatesアルゴリズム）
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
             try {
                 const response = await fetch(GAS_WEB_APP_URL, {
@@ -137,7 +146,8 @@
                 const data = await response.json();
                 
                 if (data.status === 'success' && data.images.length > 0) {
-                    images = data.images;
+                    // ★ 取得した画像をランダムにシャッフルする
+                    images = shuffleArray(data.images);
 
                     if (isInitial) {
                         showImage(currentIndex);
@@ -192,6 +202,12 @@
         function nextSlide() {
             if (images.length === 0) return;
             currentIndex = (currentIndex + 1) % images.length;
+            
+            // 一番最後まで行ったら、再度シャッフルし直してループするとよりランダム感が出ます
+            if (currentIndex === 0) {
+                shuffleArray(images);
+            }
+            
             showImage(currentIndex);
         }
     </script>
