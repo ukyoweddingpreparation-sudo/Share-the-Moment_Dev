@@ -38,10 +38,10 @@
             position: absolute;
             bottom: 20px;
             right: 20px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.8);
             font-family: sans-serif;
             font-size: 14px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             padding: 8px 15px;
             border-radius: 20px;
             z-index: 10;
@@ -65,8 +65,7 @@
         let slideTimer = null;
         let lastKnownTimestamp = null;
 
-        // 初期化処理
-        async function initViewer() {
+        window.onload = async function() {
             const container = document.getElementById('slideContainer');
             
             imgElement1 = document.createElement('img');
@@ -74,17 +73,16 @@
             container.appendChild(imgElement1);
             container.appendChild(imgElement2);
 
-            // 初回データ取得＆スタート
+            // 初回データ取得
             await fetchImagesAndRefresh(true);
 
-            // 4秒ごとに次のスライドへ切り替え
+            // 4秒ごとにスライド切り替え
             slideTimer = setInterval(nextSlide, 4000);
             
-            // 3秒ごとにFirebaseのトリガーを軽量チェック
+            // 3秒ごとにFirebaseチェック
             setInterval(checkFirebaseTrigger, 3000);
-        }
+        };
 
-        // Firebaseのタイムスタンプを確認し、更新があれば画像リストを再取得
         async function checkFirebaseTrigger() {
             try {
                 const response = await fetch(FIREBASE_DB_URL);
@@ -99,20 +97,23 @@
                         
                         await fetchImagesAndRefresh(false, true);
 
-                        // 4秒タイマーをリセットして仕切り直し
                         clearInterval(slideTimer);
                         slideTimer = setInterval(nextSlide, 4000);
                     }
                 }
             } catch (e) {
-                console.error('Firebaseの確認に失敗しました', e);
+                console.error('Firebaseの確認に失敗しました:', e);
             }
         }
 
-        // GASから最新の画像一覧を取得して画面を更新
         async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
             try {
-                const response = await fetch(GAS_WEB_APP_URL);
+                // ★【重要】GASの302リダイレクトを確実に追従させるため redirect: "follow" を追加
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: "GET",
+                    redirect: "follow" 
+                });
+
                 const data = await response.json();
                 
                 if (data.status === 'success' && data.images.length > 0) {
@@ -130,15 +131,13 @@
                     document.getElementById('statusBadge').innerText = 'フォルダに写真がありません';
                 }
             } catch (e) {
-                console.error('画像データの取得に失敗しました', e);
-                document.getElementById('statusBadge').innerText = '通信エラー（再試行中...）';
+                console.error('画像データの取得に失敗しました:', e);
+                document.getElementById('statusBadge').innerText = '通信エラー';
             }
         }
 
-        // 指定インデックスの画像を表示
         function showImage(index) {
             if (images.length === 0) return;
-
             const imageUrl = images[index].url;
 
             if (useFirstImage) {
@@ -150,19 +149,14 @@
                 imgElement2.classList.add('active');
                 imgElement1.classList.remove('active');
             }
-
             useFirstImage = !useFirstImage;
         }
 
-        // 通常の次のスライドへ
         function nextSlide() {
             if (images.length === 0) return;
             currentIndex = (currentIndex + 1) % images.length;
             showImage(currentIndex);
         }
-
-        window.onload = initViewer;
     </script>
 </body>
 </html>
-
