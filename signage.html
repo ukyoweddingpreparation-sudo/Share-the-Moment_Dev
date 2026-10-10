@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="ja"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;ウェディング・フォトサイネージ&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body, html {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #000;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.slide-container {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>height: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: relative;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>img {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>max-width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>max-height: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>object-fit: contain;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>opacity: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>transition: opacity 1s ease-in-out;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>img.active {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>opacity: 1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.status-badge {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>position: absolute;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>bottom: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>right: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: rgba(255, 255, 255, 0.6);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-family: sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 14px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.5);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 8px 15px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 20px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>z-index: 10;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="slide-container" id="slideContainer"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="status-badge" id="statusBadge"&gt;システム接続中...&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// ⚙️ 設定：ご自身の環境に合わせて書き換えてください</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const GAS_WEB_APP_URL = "YOUR_GAS_WEB_APP_URL"; // デプロイしたGASのWebアプリURL</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const FIREBASE_DB_URL = "https://signageresource-syncsystem-default-rtdb.firebaseio.com/trigger.json";</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let images = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let currentIndex = 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let imgElement1, imgElement2;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let useFirstImage = true;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let slideTimer = null;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let lastKnownTimestamp = null;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 初期化処理</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function initViewer() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const container = document.getElementById('slideContainer');</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>imgElement1 = document.createElement('img');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>imgElement2 = document.createElement('img');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>container.appendChild(imgElement1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>container.appendChild(imgElement2);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 初回データ取得＆スタート</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>await fetchImagesAndRefresh(true);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 4秒ごとに次のスライドへ切り替え</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>slideTimer = setInterval(nextSlide, 4000);</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// 3秒ごとにFirebaseのトリガーを軽量チェック</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setInterval(checkFirebaseTrigger, 3000);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Firebaseのタイムスタンプを確認し、更新があれば画像リストを再取得</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function checkFirebaseTrigger() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const response = await fetch(FIREBASE_DB_URL);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const data = await response.json();</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (data &amp;&amp; data.timestamp) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (lastKnownTimestamp === null) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>lastKnownTimestamp = data.timestamp;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>} else if (data.timestamp &gt; lastKnownTimestamp) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>console.log('新着写真の合図を検知しました！即時同期します。');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>lastKnownTimestamp = data.timestamp;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                        </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>await fetchImagesAndRefresh(false, true);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>// 4秒タイマーをリセットして仕切り直し</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>clearInterval(slideTimer);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>slideTimer = setInterval(nextSlide, 4000);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} catch (e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error('Firebaseの確認に失敗しました', e);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// GASから最新の画像一覧を取得して画面を更新</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const response = await fetch(GAS_WEB_APP_URL);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const data = await response.json();</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>if (data.status === 'success' &amp;&amp; data.images.length &gt; 0) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>images = data.images;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>if (isInitial) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>showImage(currentIndex);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>document.getElementById('statusBadge').innerText = `写真総数: ${images.length}枚`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>} else if (isInterrupt) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>currentIndex = 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>showImage(currentIndex);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>document.getElementById('statusBadge').innerText = `✨新着写真を受信！ (総数: ${images.length}枚)`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>} else if (data.status === 'success' &amp;&amp; data.images.length === 0) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>document.getElementById('statusBadge').innerText = 'フォルダに写真がありません';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} catch (e) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error('画像データの取得に失敗しました', e);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById('statusBadge').innerText = '通信エラー（再試行中...）';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 指定インデックスの画像を表示</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function showImage(index) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (images.length === 0) return;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const imageUrl = images[index].url;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (useFirstImage) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>imgElement1.src = imageUrl;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>imgElement1.classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>imgElement2.classList.remove('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>imgElement2.src = imageUrl;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>imgElement2.classList.add('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>imgElement1.classList.remove('active');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>useFirstImage = !useFirstImage;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 通常の次のスライドへ</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function nextSlide() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (images.length === 0) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>currentIndex = (currentIndex + 1) % images.length;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>showImage(currentIndex);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>window.onload = initViewer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
