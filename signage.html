@@ -28,10 +28,10 @@
             width: 100%;
             height: 100%;
             /* 
-              ★ ここで背景画像を綺麗に見せつつ、文字をくっきり際立たせるためのフィルター（グラデーション）を重ねています。
-              url('ここに任意の画像URLを入れてください') の部分を変更してください。
+              ★グラデーションと画像URLの間に正しいカンマ(,)を配置しています。
+              背景写真は鮮明に保ちつつ、重ねたダークフィルターで文字がくっきり浮き上がります。
             */
-            background: linear-gradient(rgba(12, 11, 10, 0.55), rgba(12, 11, 10, 0.82)), 
+            background: linear-gradient(rgba(12, 11, 10, 0.45), rgba(12, 11, 10, 0.75)), 
                         url('https://drive.google.com/uc?export=view&id=1ePvmQtV_J-GOBjYiyYDJpWY5HeYGYJME') center/cover no-repeat;
             z-index: 1000;
             display: flex;
@@ -54,7 +54,7 @@
             text-transform: uppercase;
             margin-bottom: 14px;
             font-weight: 600;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
         .splash-title {
@@ -64,7 +64,7 @@
             color: #ffffff;
             margin-bottom: 18px;
             font-weight: 500;
-            text-shadow: 0 4px 25px rgba(0,0,0,0.8);
+            text-shadow: 0 4px 25px rgba(0,0,0,0.9);
         }
 
         .splash-date {
@@ -73,7 +73,7 @@
             letter-spacing: 0.25em;
             color: #e6c567;
             margin-bottom: 40px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
         /* 右下の接続中インジケーター */
