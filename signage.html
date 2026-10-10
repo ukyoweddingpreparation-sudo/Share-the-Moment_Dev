@@ -28,11 +28,11 @@
             width: 100%;
             height: 100%;
             /* 
-              ★グラデーションと画像URLの間に正しいカンマ(,)を配置しています。
-              背景写真は鮮明に保ちつつ、重ねたダークフィルターで文字がくっきり浮き上がります。
+              ★ GitHub上のリソースファイルを直接指定（相対パス）
+              写真が綺麗に映えるよう、上からダークグラデーションを重ねています
             */
             background: linear-gradient(rgba(12, 11, 10, 0.45), rgba(12, 11, 10, 0.75)), 
-                        url('https://drive.google.com/uc?export=view&id=1ePvmQtV_J-GOBjYiyYDJpWY5HeYGYJME') center/cover no-repeat;
+                        url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -199,7 +199,7 @@
 </head>
 <body>
 
-    <!-- 🚪 アプリ起動時スプラッシュ画面 -->
+    <!-- 🚪 アプリ起動時スプラッシュ画面（GitHubのリソース画像を直接読み込み） -->
     <div id="loadingScreen">
         <div class="splash-subtitle">REAL-TIME PHOTO & MESSAGE SYNC</div>
         <div class="splash-title">L'Éternel Moment</div>
@@ -241,7 +241,7 @@
             container.appendChild(imgElement1);
             container.appendChild(imgElement2);
 
-            await fetchImagesAndRefresh(true);
+            fetchImagesAndRefresh(true);
 
             slideTimer = setInterval(nextSlide, 4000);
             setInterval(checkFirebaseTrigger, 3000);
@@ -305,13 +305,16 @@
                         currentIndex = 0;
                         showImage(currentIndex);
 
+                        // 初回起動時は、オープニング画面を最低「2.5秒間」しっかり表示させてから美しくフェードアウト
                         if (isFirstLoad) {
                             isFirstLoad = false;
-                            const loadingScreen = document.getElementById('loadingScreen');
-                            loadingScreen.classList.add('fade-out');
                             setTimeout(() => {
-                                loadingScreen.style.display = 'none';
-                            }, 1500);
+                                const loadingScreen = document.getElementById('loadingScreen');
+                                loadingScreen.classList.add('fade-out');
+                                setTimeout(() => {
+                                    loadingScreen.style.display = 'none';
+                                }, 1500);
+                            }, 2500);
                         }
                     }
                 }
