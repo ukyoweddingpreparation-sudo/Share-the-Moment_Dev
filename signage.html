@@ -2,19 +2,22 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ウェディング・フォトサイネージ</title>
+    <title>Wedding Photo Signage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #000;
+            background: radial-gradient(circle at center, #1a1816 0%, #0c0b0a 100%);
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Shippori Mincho', 'Noto Sans JP', sans-serif;
+            font-family: 'Shippori Mincho', serif;
         }
         .slide-container {
             width: 100%;
@@ -25,57 +28,89 @@
             align-items: center;
         }
         img {
-            max-width: 100%;
-            max-height: 100%;
+            max-width: 95%;
+            max-height: 95%;
             object-fit: contain;
             position: absolute;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+            transform: scale(0.98);
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
         img.active {
             opacity: 1;
+            transform: scale(1);
         }
 
-        /* 💬 コメント風メッセージ演出のスタイル */
+        /* 💎 キレイめで品のあるふんわり漂うメッセージ枠 */
         .comment-overlay {
             position: absolute;
-            bottom: 60px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(20, 20, 20, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            color: #ffffff;
-            padding: 16px 28px;
-            border-radius: 30px;
-            max-width: 80%;
+            background: rgba(20, 18, 16, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            color: #fcfbfa;
+            padding: 22px 40px;
+            border-radius: 24px;
+            max-width: 75%;
             text-align: center;
-            font-size: 1.4rem;
-            letter-spacing: 0.05em;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(212, 175, 55, 0.1);
             z-index: 20;
             opacity: 0;
             transition: opacity 0.8s ease, transform 0.8s ease;
             pointer-events: none;
         }
+
         .comment-overlay.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            animation: floatMessage 6s ease-in-out infinite alternate;
         }
+
         .comment-overlay.hide {
             opacity: 0;
-            transform: translateX(-50%) translateY(15px);
+            transform: translateX(-50%) translateY(20px);
+        }
+
+        /* ふわふわ漂うアニメーション */
+        @keyframes floatMessage {
+            0% { transform: translateX(-50%) translateY(0px) rotate(0deg); }
+            50% { transform: translateX(-50%) translateY(-8px) rotate(0.3deg); }
+            100% { transform: translateX(-50%) translateY(4px) rotate(-0.3deg); }
+        }
+
+        .comment-author {
+            font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+            color: #d4af37;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .comment-text {
+            font-size: 1.35rem;
+            letter-spacing: 0.08em;
+            line-height: 1.6;
+            color: #ffffff;
+            font-weight: 400;
         }
     </style>
 </head>
 <body>
 
     <div class="slide-container" id="slideContainer"></div>
-    <div id="commentOverlay" class="comment-overlay"></div>
+    <div id="commentOverlay" class="comment-overlay">
+        <div id="commentAuthor" class="comment-author"></div>
+        <div id="commentText" class="comment-text"></div>
+    </div>
 
     <script>
-        // ⚙️ 設定：ご自身の環境に合わせて書き換えてください
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec"; // デプロイしたGASのWebアプリURL
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec"; // ★デプロイしたGASのURL
         const FIREBASE_DB_URL = "https://signageresource-syncsystem-default-rtdb.firebaseio.com/trigger.json";
 
         let images = [];
@@ -86,6 +121,9 @@
         let lastKnownTimestamp = null;
         let commentTimer = null;
 
+        // すでに表示したメッセージのIDをブラウザに記憶するキー
+        const SHOWN_MESSAGES_KEY = "wedding_shown_messages_v1";
+
         window.onload = async function() {
             const container = document.getElementById('slideContainer');
             
@@ -94,13 +132,9 @@
             container.appendChild(imgElement1);
             container.appendChild(imgElement2);
 
-            // 初回データ取得
             await fetchImagesAndRefresh(true);
 
-            // 4秒ごとにスライド切り替え
             slideTimer = setInterval(nextSlide, 4000);
-            
-            // 3秒ごとにFirebaseチェック
             setInterval(checkFirebaseTrigger, 3000);
         };
 
@@ -113,9 +147,7 @@
                     if (lastKnownTimestamp === null) {
                         lastKnownTimestamp = data.timestamp;
                     } else if (data.timestamp > lastKnownTimestamp) {
-                        console.log('新着写真の合図を検知しました！即時同期します。');
                         lastKnownTimestamp = data.timestamp;
-                        
                         await fetchImagesAndRefresh(false, true);
 
                         clearInterval(slideTimer);
@@ -123,11 +155,10 @@
                     }
                 }
             } catch (e) {
-                console.error('Firebaseの確認に失敗しました:', e);
+                console.error('Firebase確認エラー:', e);
             }
         }
 
-        // 配列をランダムにシャッフルする関数（Fisher-Yatesアルゴリズム）
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -146,19 +177,32 @@
                 const data = await response.json();
                 
                 if (data.status === 'success' && data.images.length > 0) {
-                    // ★ 取得した画像をランダムにシャッフルする
                     images = shuffleArray(data.images);
 
-                    if (isInitial) {
-                        showImage(currentIndex);
-                    } else if (isInterrupt) {
+                    if (isInitial || isInterrupt) {
                         currentIndex = 0;
                         showImage(currentIndex);
                     }
                 }
             } catch (e) {
-                console.error('画像データの取得に失敗しました:', e);
+                console.error('画像データ取得エラー:', e);
             }
+        }
+
+        function getShownMessages() {
+            try {
+                return JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
+            } catch (e) { return []; }
+        }
+
+        function markMessageAsShown(id) {
+            try {
+                const shown = getShownMessages();
+                if (!shown.includes(id)) {
+                    shown.push(id);
+                    localStorage.setItem(SHOWN_MESSAGES_KEY, JSON.stringify(shown));
+                }
+            } catch (e) {}
         }
 
         function showImage(index) {
@@ -166,6 +210,8 @@
             const currentItem = images[index];
             const imageUrl = currentItem.url;
             const message = currentItem.message;
+            const author = currentItem.author;
+            const imageId = currentItem.id;
 
             // 画像切り替え
             if (useFirstImage) {
@@ -179,16 +225,25 @@
             }
             useFirstImage = !useFirstImage;
 
-            // メッセージ演出の制御
+            // メッセージ演出の制御（初回のみ表示判定）
             const commentEl = document.getElementById('commentOverlay');
             clearTimeout(commentTimer);
 
-            if (message && message.trim() !== "") {
-                commentEl.innerText = message;
+            const shownList = getShownMessages();
+            const hasMessage = message && message.trim() !== "";
+            const isFirstTime = hasMessage && !shownList.includes(imageId);
+
+            if (isFirstTime) {
+                document.getElementById('commentAuthor').innerText = author ? `${author} 様からのメッセージ` : 'ゲストからのメッセージ';
+                document.getElementById('commentText').innerText = message;
+                
                 commentEl.classList.remove('hide');
                 commentEl.classList.add('show');
+                
+                // 一度表示したことを記録
+                markMessageAsShown(imageId);
 
-                // 約5秒後にコメントをふわっと消す
+                // 約5秒後にふわっと消す
                 commentTimer = setTimeout(() => {
                     commentEl.classList.remove('show');
                     commentEl.classList.add('hide');
@@ -202,12 +257,9 @@
         function nextSlide() {
             if (images.length === 0) return;
             currentIndex = (currentIndex + 1) % images.length;
-            
-            // 一番最後まで行ったら、再度シャッフルし直してループするとよりランダム感が出ます
             if (currentIndex === 0) {
                 shuffleArray(images);
             }
-            
             showImage(currentIndex);
         }
     </script>
