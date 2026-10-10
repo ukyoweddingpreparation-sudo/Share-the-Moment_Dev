@@ -2,17 +2,17 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Wedding Photo Signage</title>
+    <title>L'Eternel Moment - Wedding Signage</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, #1a1816 0%, #0c0b0a 100%);
+            background: #0c0b0a;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -20,48 +20,80 @@
             font-family: 'Shippori Mincho', serif;
         }
 
-        /* 🚪 起動時のローディング（オープニング）画面 */
-        .loading-screen {
-            position: absolute;
+        /* 🚪 起動時ラグジュアリー・スプラッシュ（オープニング）画面 */
+        #loadingScreen {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* 背景にGitHub上の画像を指定（暗めのフィルターを重ねて高級感を演出） */
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('YOUR_WELCOME_IMAGE_URL') center/cover no-repeat;
-            z-index: 100;
+            /* 添付写真のURLを背景に設定し、上品なダークグラデーションを重ねる */
+            background: linear-gradient(rgba(12, 11, 10, 0.4), rgba(12, 11, 10, 0.75)), 
+                        url('https://drive.google.com/uc?export=view&id=1jhmp2m_lTyNmlVD2lXasmlQGhaviJjf3') center/cover no-repeat;
+            z-index: 1000;
             display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
-            padding: 50px;
-            transition: opacity 1.2s ease-in-out;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: opacity 1.5s ease-in-out;
         }
-        .loading-screen.fade-out {
+        #loadingScreen.fade-out {
             opacity: 0;
             pointer-events: none;
         }
 
-        /* 右下の動的接続中インジケーター */
+        .splash-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.35em;
+            color: #d4af37;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .splash-title {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 3rem;
+            letter-spacing: 0.15em;
+            color: #ffffff;
+            margin-bottom: 16px;
+            font-weight: 500;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .splash-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            letter-spacing: 0.25em;
+            color: #e6c567;
+            margin-bottom: 40px;
+        }
+
+        /* 右下の接続中インジケーター */
         .loading-indicator {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
             background: rgba(20, 18, 16, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(212, 175, 55, 0.45);
             color: #fcfbfa;
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 30px;
-            font-size: 1.1rem;
-            letter-spacing: 0.12em;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
             display: flex;
             align-items: center;
             gap: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* くるくる回る動的スピナーアニメーション */
         .spinner {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border: 2px solid rgba(212, 175, 55, 0.3);
             border-top-color: #d4af37;
             border-radius: 50%;
@@ -79,7 +111,7 @@
             justify-content: center;
             align-items: center;
         }
-        img {
+        img.slide-img {
             max-width: 95%;
             max-height: 95%;
             object-fit: contain;
@@ -90,18 +122,18 @@
             border-radius: 4px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
-        img.active {
+        img.slide-img.active {
             opacity: 1;
             transform: scale(1);
         }
 
-        /* ☁️ クラウド型メッセージ枠（下から上へ浮かぶ演出） */
+        /* ☁️ クラウド型メッセージ枠 */
         .comment-overlay {
             position: absolute;
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%) translateY(40px);
-            background: rgba(25, 23, 20, 0.82);
+            background: rgba(25, 23, 20, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1.5px solid rgba(212, 175, 55, 0.5);
@@ -110,9 +142,7 @@
             border-radius: 60px / 45px;
             box-shadow: 
                 0 20px 50px rgba(0,0,0,0.7), 
-                inset 0 0 20px rgba(212, 175, 55, 0.15),
-                -30px 10px 30px rgba(0,0,0,0.2),
-                30px 10px 30px rgba(0,0,0,0.2);
+                inset 0 0 20px rgba(212, 175, 55, 0.15);
             max-width: 75%;
             text-align: center;
             z-index: 20;
@@ -124,7 +154,7 @@
         .comment-overlay::after {
             content: '';
             position: absolute;
-            background: rgba(25, 23, 20, 0.85);
+            background: rgba(25, 23, 20, 0.88);
             border: 1.5px solid rgba(212, 175, 55, 0.45);
             border-radius: 50%;
             z-index: -1;
@@ -144,7 +174,7 @@
         }
 
         .comment-author {
-            font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.05rem;
             letter-spacing: 0.18em;
             color: #e6c567;
@@ -164,11 +194,15 @@
 </head>
 <body>
 
-    <!-- 🚪 ローディング画面（接続中表示＆背景ウェルカム画像） -->
-    <div id="loadingScreen" class="loading-screen">
+    <!-- 🚪 アプリ起動時スプラッシュ画面 -->
+    <div id="loadingScreen">
+        <div class="splash-subtitle">REAL-TIME PHOTO & MESSAGE SYNC</div>
+        <div class="splash-title">L'Éternel Moment</div>
+        <div class="splash-date">October 25, 2026</div>
+
         <div class="loading-indicator">
             <div class="spinner"></div>
-            <span>システム接続中...</span>
+            <span id="loadingText">システム接続中...</span>
         </div>
     </div>
 
@@ -181,9 +215,6 @@
     <script>
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec"; // ★デプロイしたGASのURL
         const FIREBASE_DB_URL = "https://signageresource-syncsystem-default-rtdb.firebaseio.com/trigger.json";
-        
-        // ★必要に応じてGitHub上のウェルカム画像のURLをここに設定してください（index.html等で使っている画像のURL等でもOKです）
-        const WELCOME_IMAGE_URL = "https://drive.google.com/thumbnail?id=1ePvmQtV_J-GOBjYiyYDJpWY5HeYGYJME&sz=w1000";
 
         let images = [];
         let currentIndex = 0;
@@ -193,16 +224,15 @@
         let lastKnownTimestamp = null;
         let isFirstLoad = true;
 
-        const SHOWN_MESSAGES_KEY = "wedding_shown_messages_v2";
+        const SHOWN_BATCHES_KEY = "wedding_shown_batches_v1";
 
         window.onload = async function() {
-            // 背景画像の適用を動的にセット
-            document.getElementById('loadingScreen').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('${WELCOME_IMAGE_URL}')`;
-
             const container = document.getElementById('slideContainer');
             
             imgElement1 = document.createElement('img');
+            imgElement1.className = 'slide-img';
             imgElement2 = document.createElement('img');
+            imgElement2.className = 'slide-img';
             container.appendChild(imgElement1);
             container.appendChild(imgElement2);
 
@@ -233,12 +263,33 @@
             }
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+        /**
+         * 💡 連番維持＆グループシャッフルロジック
+         * 写真をバッチIDごとにグループ化し、グループ全体の順序はランダムにしつつ、
+         * 同一グループ内の写真は必ず連番（アップロード順）で連続して再生されるように並び替えます。
+         */
+        function organizeImages(rawImages) {
+            const batchMap = {};
+            rawImages.forEach(img => {
+                const bId = img.batchId || "default";
+                if (!batchMap[bId]) batchMap[bId] = [];
+                batchMap[bId].push(img);
+            });
+
+            // 各バッチ内を古い順（アップロード順）にソート
+            Object.keys(batchMap).forEach(bId => {
+                batchMap[bId].sort((a, b) => a.createdTime - b.createdTime);
+            });
+
+            // バッチの配列を抽出してシャッフル
+            let batches = Object.values(batchMap);
+            for (let i = batches.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [batches[i], batches[j]] = [batches[j], batches[i]];
             }
-            return array;
+
+            // 平坦化（同じグループの写真は連番で繋がる）
+            return batches.flat();
         }
 
         async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
@@ -251,20 +302,19 @@
                 const data = await response.json();
                 
                 if (data.status === 'success' && data.images.length > 0) {
-                    images = shuffleArray(data.images);
+                    images = organizeImages(data.images);
 
                     if (isInitial || isInterrupt) {
                         currentIndex = 0;
                         showImage(currentIndex);
 
-                        // 初回データ取得＆最初の画像セットが完了したらローディング画面をフェードアウト
                         if (isFirstLoad) {
                             isFirstLoad = false;
                             const loadingScreen = document.getElementById('loadingScreen');
                             loadingScreen.classList.add('fade-out');
                             setTimeout(() => {
                                 loadingScreen.style.display = 'none';
-                            }, 1200); // 遷移アニメーション完了後に要素を完全に消去
+                            }, 1500);
                         }
                     }
                 }
@@ -273,18 +323,18 @@
             }
         }
 
-        function getShownMessages() {
+        function getShownBatches() {
             try {
-                return JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
+                return JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
             } catch (e) { return []; }
         }
 
-        function markMessageAsShown(id) {
+        function markBatchAsShown(batchId) {
             try {
-                const shown = getShownMessages();
-                if (!shown.includes(id)) {
-                    shown.push(id);
-                    localStorage.setItem(SHOWN_MESSAGES_KEY, JSON.stringify(shown));
+                const shown = getShownBatches();
+                if (!shown.includes(batchId)) {
+                    shown.push(batchId);
+                    localStorage.setItem(SHOWN_BATCHES_KEY, JSON.stringify(shown));
                 }
             } catch (e) {}
         }
@@ -295,7 +345,7 @@
             const imageUrl = currentItem.url;
             const message = currentItem.message;
             const author = currentItem.author;
-            const imageId = currentItem.id;
+            const batchId = currentItem.batchId || "default";
 
             if (useFirstImage) {
                 imgElement1.src = imageUrl;
@@ -312,15 +362,16 @@
             commentEl.classList.remove('show');
             void commentEl.offsetWidth;
 
-            const shownList = getShownMessages();
+            const shownBatches = getShownBatches();
             const hasMessage = message && message.trim() !== "";
-            const isFirstTime = hasMessage && !shownList.includes(imageId);
+            // グループ（バッチ）単位で初めて登場する場合のみメッセージを表示
+            const isFirstTimeForBatch = hasMessage && !shownBatches.includes(batchId);
 
-            if (isFirstTime) {
+            if (isFirstTimeForBatch) {
                 document.getElementById('commentAuthor').innerText = author ? `${author} 様からのメッセージ` : 'ゲストからのメッセージ';
                 document.getElementById('commentText').innerText = message;
                 commentEl.classList.add('show');
-                markMessageAsShown(imageId);
+                markBatchAsShown(batchId);
             }
         }
 
@@ -328,7 +379,7 @@
             if (images.length === 0) return;
             currentIndex = (currentIndex + 1) % images.length;
             if (currentIndex === 0) {
-                shuffleArray(images);
+                images = organizeImages(images);
             }
             showImage(currentIndex);
         }
