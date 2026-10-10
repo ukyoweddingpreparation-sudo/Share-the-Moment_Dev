@@ -20,15 +20,18 @@
             font-family: 'Shippori Mincho', serif;
         }
 
-        /* 🚪 起動時ラグジュアリー・スプラッシュ（オープニング）画面 */
+        /* 🚪 起動時ラグジュアリー・スプラッシュ画面 */
         #loadingScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* 添付写真のURLを背景に設定し、上品なダークグラデーションを重ねる */
-            background: linear-gradient(rgba(12, 11, 10, 0.4), rgba(12, 11, 10, 0.75)), 
+            /* 
+              ★ ここで背景画像を綺麗に見せつつ、文字をくっきり際立たせるためのフィルター（グラデーション）を重ねています。
+              url('ここに任意の画像URLを入れてください') の部分を変更してください。
+            */
+            background: linear-gradient(rgba(12, 11, 10, 0.55), rgba(12, 11, 10, 0.82)), 
                         url('https://drive.google.com/uc?export=view&id=1jhmp2m_lTyNmlVD2lXasmlQGhaviJjf3') center/cover no-repeat;
             z-index: 1000;
             display: flex;
@@ -45,30 +48,32 @@
 
         .splash-subtitle {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             letter-spacing: 0.35em;
             color: #d4af37;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .splash-title {
             font-family: 'Shippori Mincho', serif;
-            font-size: 3rem;
+            font-size: 3.2rem;
             letter-spacing: 0.15em;
             color: #ffffff;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             font-weight: 500;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            text-shadow: 0 4px 25px rgba(0,0,0,0.8);
         }
 
         .splash-date {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             letter-spacing: 0.25em;
             color: #e6c567;
             margin-bottom: 40px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         /* 右下の接続中インジケーター */
@@ -263,11 +268,6 @@
             }
         }
 
-        /**
-         * 💡 連番維持＆グループシャッフルロジック
-         * 写真をバッチIDごとにグループ化し、グループ全体の順序はランダムにしつつ、
-         * 同一グループ内の写真は必ず連番（アップロード順）で連続して再生されるように並び替えます。
-         */
         function organizeImages(rawImages) {
             const batchMap = {};
             rawImages.forEach(img => {
@@ -276,19 +276,16 @@
                 batchMap[bId].push(img);
             });
 
-            // 各バッチ内を古い順（アップロード順）にソート
             Object.keys(batchMap).forEach(bId => {
                 batchMap[bId].sort((a, b) => a.createdTime - b.createdTime);
             });
 
-            // バッチの配列を抽出してシャッフル
             let batches = Object.values(batchMap);
             for (let i = batches.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [batches[i], batches[j]] = [batches[j], batches[i]];
             }
 
-            // 平坦化（同じグループの写真は連番で繋がる）
             return batches.flat();
         }
 
@@ -364,7 +361,6 @@
 
             const shownBatches = getShownBatches();
             const hasMessage = message && message.trim() !== "";
-            // グループ（バッチ）単位で初めて登場する場合のみメッセージを表示
             const isFirstTimeForBatch = hasMessage && !shownBatches.includes(batchId);
 
             if (isFirstTimeForBatch) {
