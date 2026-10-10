@@ -110,11 +110,33 @@
             justify-content: center;
             align-items: center;
         }
+
+        /* 🌫️ 余白を埋めるための背景ぼかしレイヤー（同じ写真を引き伸ばしてブラーをかける） */
+        .bg-blur {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(25px) brightness(0.45); /* ぼかし具合と、少し暗くしてメインを引き立てる調整 */
+            transform: scale(1.1);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+        .bg-blur.active {
+            opacity: 1;
+        }
+
+        /* メインの綺麗に収まる写真 */
         img.slide-img {
             max-width: 95%;
             max-height: 95%;
             object-fit: contain;
             position: absolute;
+            z-index: 2; /* ぼかし背景の上に配置 */
             opacity: 0;
             transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
             transform: scale(0.98);
@@ -129,7 +151,7 @@
         /* ☁️ 独立してゆっくりジグザグ昇華していくメッセージコンテナ */
         .comment-overlay {
             position: absolute;
-            bottom: -150px; /* 画面外下部からスタート */
+            bottom: -150px;
             left: 50%;
             background: rgba(25, 23, 20, 0.88);
             backdrop-filter: blur(16px);
@@ -143,10 +165,9 @@
                 inset 0 0 20px rgba(212, 175, 55, 0.2);
             max-width: 75%;
             text-align: center;
-            z-index: 20;
+            z-index: 30; /* 写真よりも手前に表示 */
             opacity: 0;
             pointer-events: none;
-            /* 初期状態は非表示（JSでトリガー時にクラス付与） */
         }
 
         .comment-overlay::before,
@@ -161,40 +182,18 @@
         .comment-overlay::before { width: 70px; height: 70px; top: -25px; left: 35px; }
         .comment-overlay::after { width: 90px; height: 90px; top: -35px; right: 40px; }
 
-        /* 🚀 写真とは完全に独立して、約9秒かけてゆっくりジグザグに画面上部へ昇華するアニメーション */
         .comment-overlay.animate-zigzag {
             animation: slowZigzagAscent 9s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
 
         @keyframes slowZigzagAscent {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, 0px) scale(0.9);
-            }
-            10% {
-                opacity: 1;
-                transform: translate(-50%, -100px) scale(1);
-            }
-            30% {
-                opacity: 1;
-                transform: translate(calc(-50% + 120px), -280px) scale(1); /* 右へスイング */
-            }
-            50% {
-                opacity: 1;
-                transform: translate(calc(-50% - 100px), -450px) scale(1); /* 左へスイング */
-            }
-            70% {
-                opacity: 1;
-                transform: translate(calc(-50% + 80px), -620px) scale(1); /* 右へスイング */
-            }
-            90% {
-                opacity: 0.8;
-                transform: translate(calc(-50% - 50px), -780px) scale(0.95); /* 上部へ接近 */
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -950px) scale(0.9); /* 画面上部に完全に消え去る */
-            }
+            0% { opacity: 0; transform: translate(-50%, 0px) scale(0.9); }
+            10% { opacity: 1; transform: translate(-50%, -100px) scale(1); }
+            30% { opacity: 1; transform: translate(calc(-50% + 120px), -280px) scale(1); }
+            50% { opacity: 1; transform: translate(calc(-50% - 100px), -450px) scale(1); }
+            70% { opacity: 1; transform: translate(calc(-50% + 80px), -620px) scale(1); }
+            90% { opacity: 0.8; transform: translate(calc(-50% - 50px), -780px) scale(0.95); }
+            100% { opacity: 0; transform: translate(-50%, -950px) scale(0.9); }
         }
 
         .comment-author {
@@ -237,7 +236,7 @@
 
         let images = [];
         let currentIndex = 0;
-        let imgElement1, imgElement2;
+        let blurEl1, blurEl2, imgElement1, imgElement2;
         let useFirstImage = true;
         let slideTimer = null;
         let lastKnownTimestamp = null;
@@ -248,6 +247,15 @@
         window.onload = async function() {
             const container = document.getElementById('slideContainer');
             
+            // 背景ぼかし用要素の生成
+            blurEl1 = document.createElement('div');
+            blurEl1.className = 'bg-blur';
+            blurEl2 = document.createElement('div');
+            blurEl2.className = 'bg-blur';
+            container.appendChild(blurEl1);
+            container.appendChild(blurEl2);
+
+            // メイン写真用要素の生成
             imgElement1 = document.createElement('img');
             imgElement1.className = 'slide-img';
             imgElement2 = document.createElement('img');
@@ -383,11 +391,20 @@
             const author = currentItem.author;
             const batchId = currentItem.batchId || "default";
 
+            // メイン写真と背景ぼかしを同時に切り替え
             if (useFirstImage) {
+                blurEl1.style.backgroundImage = `url('${imageUrl}')`;
+                blurEl1.classList.add('active');
+                blurEl2.classList.remove('active');
+
                 imgElement1.src = imageUrl;
                 imgElement1.classList.add('active');
                 imgElement2.classList.remove('active');
             } else {
+                blurEl2.style.backgroundImage = `url('${imageUrl}')`;
+                blurEl2.classList.add('active');
+                blurEl1.classList.remove('active');
+
                 imgElement2.src = imageUrl;
                 imgElement2.classList.add('active');
                 imgElement1.classList.remove('active');
@@ -398,17 +415,12 @@
             const hasMessage = message && message.trim() !== "";
             const isFirstTimeForBatch = hasMessage && !shownBatches.includes(batchId);
 
-            // 💡 写真の切り替えとは別に、メッセージがある場合は専用の独立したDOM要素を生成してジグザグ上昇させる
             if (isFirstTimeForBatch) {
                 triggerFloatingComment(author, message);
                 markBatchAsShown(batchId);
             }
         }
 
-        /**
-         * 💡 写真の切り替わりに影響されず、画面下部から上部へ向かって
-         * 約9秒間かけてゆったりとジグザグに昇華していく独立したコメント要素を生成・管理する関数
-         */
         function triggerFloatingComment(author, message) {
             const commentEl = document.createElement('div');
             commentEl.className = 'comment-overlay';
@@ -418,10 +430,8 @@
             `;
             document.body.appendChild(commentEl);
 
-            // アニメーションクラスを付与して昇華スタート
             commentEl.classList.add('animate-zigzag');
 
-            // アニメーション完了（9秒後）にDOMから完全に削除してメモリを綺麗に解放
             setTimeout(() => {
                 commentEl.remove();
             }, 9000);
