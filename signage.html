@@ -12,7 +12,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background: #0c0b0a;
+            background: #fdfbf7; /* 温かみのある明るいウェディングアイボリー */
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -20,14 +20,14 @@
             font-family: 'Shippori Mincho', serif;
         }
 
-        /* 🚪 起動時ラグジュアリー・スプラッシュ画面 */
+        /* 🚪 起動時ラグジュアリー＆スウィート・スプラッシュ画面 */
         #loadingScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(12, 11, 10, 0.5), rgba(12, 11, 10, 0.8)), 
+            background: linear-gradient(rgba(253, 251, 247, 0.6), rgba(245, 238, 225, 0.85)), 
                         url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
             z-index: 1000;
             display: flex;
@@ -46,7 +46,7 @@
             content: '';
             position: absolute;
             top: 24px; left: 24px; right: 24px; bottom: 24px;
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            border: 1px solid rgba(184, 151, 83, 0.35);
             pointer-events: none;
         }
 
@@ -54,27 +54,24 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1rem;
             letter-spacing: 0.45em;
-            color: #d4af37;
+            color: #b89753;
             text-transform: uppercase;
             margin-bottom: 16px;
-            font-weight: 400;
-            opacity: 0.9;
+            font-weight: 500;
         }
 
-        /* ✨ 文字列が優雅にウェーブするアプリ名デザイン */
         .splash-title {
             font-family: 'Shippori Mincho', serif;
             font-size: 3.4rem;
             letter-spacing: 0.15em;
-            color: #ffffff;
+            color: #2c2a29;
             margin-bottom: 20px;
-            font-weight: 400;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+            font-weight: 500;
             display: flex;
             justify-content: center;
+            text-shadow: 0 2px 15px rgba(255,255,255,0.8);
         }
 
-        /* 一文字ごとにウェーブアニメーションを適用 */
         .splash-title span {
             display: inline-block;
             animation: waveAnimation 3.5s ease-in-out infinite;
@@ -82,32 +79,27 @@
         }
 
         @keyframes waveAnimation {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-12px); /* ゆるやかに上に持ち上がる */
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .splash-date {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.25rem;
             letter-spacing: 0.3em;
-            color: #e6c567;
-            font-weight: 300;
-            opacity: 0.95;
+            color: #9c7c38;
+            font-weight: 400;
         }
 
         .loading-indicator {
             position: absolute;
             bottom: 45px;
             right: 45px;
-            background: rgba(20, 18, 16, 0.65);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(212, 175, 55, 0.35);
-            color: #fcfbfa;
+            border: 1px solid rgba(184, 151, 83, 0.4);
+            color: #4a453e;
             padding: 10px 22px;
             border-radius: 30px;
             font-size: 0.9rem;
@@ -115,14 +107,14 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 30px rgba(184, 151, 83, 0.15);
         }
 
         .spinner {
             width: 14px;
             height: 14px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-top-color: #d4af37;
+            border: 2px solid rgba(184, 151, 83, 0.3);
+            border-top-color: #b89753;
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
         }
@@ -147,7 +139,7 @@
             bottom: -20px;
             background-size: cover;
             background-position: center;
-            filter: blur(25px) brightness(0.45);
+            filter: blur(25px) brightness(0.85); /* 明るいパステル調のブラー背景 */
             transform: scale(1.1);
             z-index: 1;
             opacity: 0;
@@ -166,28 +158,29 @@
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 1.5s ease-in-out, transform 4.5s cubic-bezier(0.25, 1, 0.5, 1);
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border-radius: 6px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
         img.slide-img.active {
             opacity: 1;
             transform: scale(1.03);
         }
 
-        /* 💬 チャット吹き出しスタイル */
+        /* 🌸 おしゃれ＆かわいらしい明るいウェディング・吹き出しデザイン */
         .comment-overlay {
             position: absolute;
             bottom: -130px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(18, 16, 14, 0.88);
+            /* 純白と淡いローズピンクのピュアなすりガラス調 */
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1.5px solid rgba(212, 175, 55, 0.5);
-            color: #fcfbfa;
-            padding: 24px 38px 24px 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.65), inset 0 0 15px rgba(212, 175, 55, 0.15);
+            color: #2c2a29;
+            padding: 24px 42px 24px 32px;
+            border-radius: 24px;
+            box-shadow: 0 15px 45px rgba(184, 151, 83, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.8);
             max-width: 75%;
             text-align: left;
             z-index: 30;
@@ -198,6 +191,7 @@
             gap: 6px;
         }
 
+        /* 吹き出しのしっぽ（ホワイト） */
         .comment-overlay::before {
             content: '';
             position: absolute;
@@ -205,10 +199,11 @@
             left: 45px;
             border-width: 12px 10px 0 10px;
             border-style: solid;
-            border-color: rgba(18, 16, 14, 0.9) transparent;
+            border-color: rgba(255, 255, 255, 0.95) transparent;
             display: block;
             width: 0;
         }
+        /* しっぽのゴールド枠線 */
         .comment-overlay::after {
             content: '';
             position: absolute;
@@ -222,21 +217,27 @@
             z-index: -1;
         }
 
+        /* 💖 右下に配置するきらめくハート＆お祝いエフェクト */
         .comment-heart {
             position: absolute;
             bottom: 14px;
-            right: 18px;
-            font-size: 1.1rem;
-            color: #d4af37;
-            opacity: 0.85;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+            right: 20px;
+            font-size: 1.2rem;
+            color: #e65c9c; /* 温かみのある可愛いピンクゴールド系 */
+            animation: heartPulse 1.5s ease-in-out infinite;
         }
 
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 10px rgba(230, 92, 156, 0.6); }
+        }
+
+        /* 🚀 ふんわり軽やかに昇っていくアニメーション */
         .comment-overlay.animate-stream-comment {
-            animation: streamCommentAscent 9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: sweetCommentAscent 9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        @keyframes streamCommentAscent {
+        @keyframes sweetCommentAscent {
             0% { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.92); }
             15% { opacity: 1; transform: translateX(-50%) translateY(-40px) scale(1); }
             75% { opacity: 1; transform: translateX(-50%) translateY(-450px) scale(1); }
@@ -245,9 +246,9 @@
 
         .comment-author {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            letter-spacing: 0.2em;
-            color: #d4af37;
+            font-size: 1rem;
+            letter-spacing: 0.18em;
+            color: #b89753;
             text-transform: uppercase;
             font-weight: 600;
             display: flex;
@@ -255,31 +256,26 @@
             gap: 8px;
         }
 
+        /* 名前の前におしゃれで可愛いお花のアイコン（絵文字） */
         .comment-author::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: #d4af37;
-            border-radius: 50%;
-            box-shadow: 0 0 6px #d4af37;
+            content: '💐';
+            font-size: 0.9rem;
         }
 
         .comment-text {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             letter-spacing: 0.06em;
-            line-height: 1.5;
-            color: #ffffff;
+            line-height: 1.55;
+            color: #332f2b;
             font-weight: 400;
-            padding-right: 20px;
+            padding-right: 25px;
         }
     </style>
 </head>
 <body>
 
     <div id="loadingScreen">
-        <div class="splash-subtitle">REAL-TIME PHOTO & MESSAGE SYNC</div>
-        <!-- ✨ 一文字ずつウェーブするための構造に分割 -->
+        <div class="splash-subtitle">✨ REAL-TIME PHOTO & MESSAGE SYNC ✨</div>
         <div class="splash-title" id="waveTitle"></div>
         <div class="splash-date">October 25, 2026</div>
 
@@ -303,11 +299,10 @@
         let lastKnownTimestamp = null;
         let isFirstLoad = true;
 
-        const SHOWN_BATCHES_KEY = "wedding_shown_batches_v3";
+        const SHOWN_BATCHES_KEY = "wedding_shown_batches_v4";
         const memoryShownBatches = new Set();
 
         window.onload = async function() {
-            // ✨ アプリ名にウェーブ用の一文字インデックス（--i）を自動付与
             const titleText = "L'Éternel Moment";
             const titleContainer = document.getElementById('waveTitle');
             titleContainer.innerHTML = '';
@@ -334,7 +329,6 @@
             container.appendChild(imgElement1);
             container.appendChild(imgElement2);
 
-            // ⚡ ボトルネック解消：データの非同期ロードとオープニング演出を完全並行処理化
             fetchImagesAndRefresh(true);
 
             slideTimer = setInterval(nextSlide, 4000);
@@ -422,7 +416,6 @@
                         currentIndex = 0;
                         showImage(currentIndex);
 
-                        // ⏳ どんなに通信が早くても、高級感のある起動演出を保つため「最低3.5秒間」は画面を維持
                         if (isFirstLoad) {
                             isFirstLoad = false;
                             setTimeout(() => {
@@ -431,7 +424,7 @@
                                 setTimeout(() => {
                                     loadingScreen.style.display = 'none';
                                 }, 1800);
-                            }, 3500); // 3.5秒間の贅沢なオープニング演出
+                            }, 3500);
                         }
                     }
                 }
@@ -503,7 +496,7 @@
             const commentEl = document.createElement('div');
             commentEl.className = 'comment-overlay';
             commentEl.innerHTML = `
-                <div class="comment-author">${author ? `${author}` : 'Guest'}</div>
+                <div class="comment-author">${author ? `${author}` : 'Guest'}からのメッセージ✨</div>
                 <div class="comment-text">${message}</div>
                 <div class="comment-heart">♡</div>
             `;
