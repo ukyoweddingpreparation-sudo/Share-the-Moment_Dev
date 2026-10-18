@@ -49,28 +49,52 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* ⏳ 起動中ローディング画面（ラグジュアリー仕様） */
+    /* ⏳ 起動中ローディング画面（画像のデザイン＆5秒保持対応） */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: #0b0b0b; z-index: 99999;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      transition: opacity 1.0s ease-in-out;
+      transition: opacity 1.5s ease-in-out;
+      background-image: linear-gradient(rgba(11,11,11,0.5), rgba(11,11,11,0.7)), url('https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1920');
+      background-size: cover; background-position: center;
+    }
+    .loading-content {
+      text-align: center; padding: 20px;
+      animation: fadeInContent 1.5s ease-out;
+    }
+    .loading-subtitle {
+      font-family: var(--font-en); font-size: 0.95rem; font-weight: 500; color: #d4af37;
+      letter-spacing: 0.25em; margin-bottom: 10px; text-transform: uppercase;
     }
     .loading-title {
-      font-family: var(--font-en);
-      font-size: 1.8rem; font-style: italic; color: #d4af37;
-      letter-spacing: 0.15em; margin-bottom: 15px;
+      font-family: var(--font-en); font-size: 2.4rem; color: #ffffff;
+      letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.6);
     }
-    .loading-spinner {
-      width: 40px; height: 40px; border: 2px solid rgba(184, 151, 83, 0.2);
-      border-top: 2px solid #d4af37; border-radius: 50%;
-      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      margin-bottom: 20px;
+    .loading-date {
+      font-family: var(--font-en); font-size: 0.95rem; color: #d4af37;
+      letter-spacing: 0.2em; font-style: italic; margin-bottom: 40px;
     }
-    .loading-text {
-      font-size: 1.1rem; color: #b89753; letter-spacing: 0.2em; font-family: var(--font-serif);
+    @keyframes fadeInContent {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* 右下のシステム接続中…ステータス */
+    .loading-status-badge {
+      position: absolute; bottom: 30px; right: 30px;
+      background: rgba(15, 15, 15, 0.75); backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 20px;
+      padding: 8px 18px; display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-serif); font-size: 0.8rem; color: #f5f2eb;
+      letter-spacing: 0.05em;
+    }
+    .loading-dot {
+      width: 8px; height: 8px; background-color: #d4af37; border-radius: 50%;
+      box-shadow: 0 0 8px #d4af37;
+      animation: pulseDot 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
     #bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
     .bg-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.0s ease-in-out; filter: blur(2px); mix-blend-mode: soft-light; }
@@ -208,11 +232,17 @@
 </head>
 <body>
 
-  <!-- ⏳ 起動中ローディング画面 -->
+  <!-- ⏳ 起動中ローディング画面（画像のデザイン＆5秒保持対応） -->
   <div id="loading-screen">
-    <div class="loading-title">Wedding Reception</div>
-    <div class="loading-spinner"></div>
-    <div class="loading-text">起動中...</div>
+    <div class="loading-content">
+      <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
+      <div class="loading-title">L'Éternel Moment</div>
+      <div class="loading-date">October 25, 2026</div>
+    </div>
+    <div class="loading-status-badge">
+      <div class="loading-dot"></div>
+      <span>システム接続中...</span>
+    </div>
   </div>
 
   <div id="bg-slideshow"></div>
@@ -342,6 +372,7 @@
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
       
+      <!-- QA 1: ホーム画面に追加 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. アプリのようにホーム画面に追加するには？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -354,6 +385,15 @@
           2. 「ホーム画面に追加」をタップ
         </div>
       </div>
+
+      <!-- 💡 追加されたQA: 画面が正常に表示されない場合 -->
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. 画面が正常に表示されない・固まったときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          電波状況や一時的な読み込みエラーにより画面が正常に表示されない場合は、ブラウザの更新ボタンを押していただくか、アプリ画面を下にスワイプしてブラウザをリロードしてください。
+        </div>
+      </div>
+
       <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
   </div>
@@ -371,19 +411,19 @@
 
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec";
 
-    // 🚀 アプリ起動時の初期化＆ローディング演出
+    // 🚀 アプリ起動時の初期化＆5秒間のラグジュアリー・ローディング演出
     window.addEventListener('DOMContentLoaded', () => { 
       initBgSlideshow(); 
       initTableList(); 
 
-      // 起動中ローディングをスムーズにフェードアウト
+      // 💡 起動処理の速さに関わらず、必ず「5秒間（5000ミリ秒）」この画面を表示し続ける
       setTimeout(() => {
         const loader = document.getElementById('loading-screen');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => { loader.style.display = 'none'; }, 1000);
+          setTimeout(() => { loader.style.display = 'none'; }, 1500); // 1.5秒かけて優しくフェードアウト
         }
-      }, 600);
+      }, 5000); 
     });
 
     function initBgSlideshow() {
@@ -670,4 +710,3 @@
   </script>
 </body>
 </html>
-
