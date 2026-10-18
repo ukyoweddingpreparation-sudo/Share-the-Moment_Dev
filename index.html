@@ -16,12 +16,17 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Share the Moment</title>
-  <link rel="apple-touch-icon" href="./App-icon②.png">
-  <link rel="icon" href="./App-icon②.png">
+  <title>SharetheMoments</title>
+  
+  <!-- 📱 ホーム画面用アイコン（GitHub上の App-icon②.jpg を指定） -->
+  <link rel="apple-touch-icon" href="./App-icon②.jpg">
+  <link rel="icon" href="./App-icon②.jpg">
+  
+  <!-- 🏷️ PWA設定（表示名を SharetheMoments に設定） -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Wedding">
+  <meta name="apple-mobile-web-app-title" content="SharetheMoments">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
@@ -49,7 +54,7 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* ⏳ 起動中ローディング画面（裏側が絶対に透けない完全独立オーバーレイ構造） */
+    /* ⏳ 起動中ローディング画面（裏側が完全に透けないよう固定・全画面を完全に覆う構造） */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
       background: #0b0b0b; z-index: 999999;
@@ -236,7 +241,7 @@
 </head>
 <body>
 
-  <!-- ⏳ 起動中ローディング画面（完全に独立したオーバーレイ） -->
+  <!-- ⏳ 起動中ローディング画面（裏側が完全に隠れる独立オーバーレイ） -->
   <div id="loading-screen">
     <div class="loading-content">
       <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
@@ -372,12 +377,12 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント（本番事前登録QA ＋ 最新QAを完全網羅） -->
+    <!-- 💡 使い方のヒント（全てのQA項目を網羅） -->
     <div id="help-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
       
-      <!-- QA 1: ホーム画面に追加 -->
+      <!-- QA 1 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. アプリのようにホーム画面に追加するには？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -391,7 +396,7 @@
         </div>
       </div>
 
-      <!-- QA 2: 何枚まで送れますか？ -->
+      <!-- QA 2 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 写真は一度に何枚まで送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -399,7 +404,7 @@
         </div>
       </div>
 
-      <!-- QA 3: 動画は送れますか？ -->
+      <!-- QA 3 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 動画は送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -407,7 +412,7 @@
         </div>
       </div>
 
-      <!-- QA 4: 送った写真は誰が見れますか？ -->
+      <!-- QA 4 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 送った写真は誰が見れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -415,7 +420,7 @@
         </div>
       </div>
 
-      <!-- QA 5: エラーが出て送れません -->
+      <!-- QA 5 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. エラーが出て送れません <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -423,7 +428,7 @@
         </div>
       </div>
 
-      <!-- QA 6: 送信履歴が見なくなりました -->
+      <!-- QA 6 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 送信履歴が見なくなりました <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -436,7 +441,7 @@
         </div>
       </div>
 
-      <!-- QA 7: 画面不具合時のリロード -->
+      <!-- QA 7 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 画面が正常に表示されない・固まったときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
