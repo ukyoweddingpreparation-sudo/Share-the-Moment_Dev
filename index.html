@@ -49,6 +49,29 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+    /* ⏳ 起動中ローディング画面（ラグジュアリー仕様） */
+    #loading-screen {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #0b0b0b; z-index: 99999;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      transition: opacity 1.0s ease-in-out;
+    }
+    .loading-title {
+      font-family: var(--font-en);
+      font-size: 1.8rem; font-style: italic; color: #d4af37;
+      letter-spacing: 0.15em; margin-bottom: 15px;
+    }
+    .loading-spinner {
+      width: 40px; height: 40px; border: 2px solid rgba(184, 151, 83, 0.2);
+      border-top: 2px solid #d4af37; border-radius: 50%;
+      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      margin-bottom: 20px;
+    }
+    .loading-text {
+      font-size: 1.1rem; color: #b89753; letter-spacing: 0.2em; font-family: var(--font-serif);
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     #bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
     .bg-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.0s ease-in-out; filter: blur(2px); mix-blend-mode: soft-light; }
     .bg-slide.active { opacity: 0.6; }
@@ -151,9 +174,8 @@
     .sidebar-menu-item { padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 8px; background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); transition: background 0.2s; }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
 
-    /* 📂 ドロップダウン（アコーディオン）式 送信履歴のスタイル */
     .history-item { background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 14px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s ease; }
-    .history-summary { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: font; cursor: pointer; font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+    .history-summary { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
     .history-summary-left { display: flex; align-items: center; gap: 8px; color: var(--primary-gold); }
     .history-summary-right { display: flex; align-items: center; gap: 6px; color: var(--text-sub); }
     .history-dropdown-icon { transition: transform 0.3s ease; color: var(--primary-gold); }
@@ -185,6 +207,14 @@
   </style>
 </head>
 <body>
+
+  <!-- ⏳ 起動中ローディング画面 -->
+  <div id="loading-screen">
+    <div class="loading-title">Wedding Reception</div>
+    <div class="loading-spinner"></div>
+    <div class="loading-text">起動中...</div>
+  </div>
+
   <div id="bg-slideshow"></div>
 
   <div class="menu-trigger" onclick="openSidebar()">
@@ -300,7 +330,7 @@
       <button class="btn btn-primary" style="margin-top:14px;" onclick="navigate('select', true)">続けてアップロードする</button>
     </div>
 
-    <!-- 📜 履歴画面（ドロップダウン式＆上限解放） -->
+    <!-- 📜 履歴画面 -->
     <div id="history-screen">
       <div class="title-area"><span class="en-sub">HISTORY</span><h2>送信履歴</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">タップすると送信した写真が開きます✨</p>
@@ -339,9 +369,22 @@
     const bgImages = ['https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000', 'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000', 'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000'];
     const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q'];
 
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec"; // ★デプロイしたGASのURL
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec";
 
-    window.addEventListener('DOMContentLoaded', () => { initBgSlideshow(); initTableList(); });
+    // 🚀 アプリ起動時の初期化＆ローディング演出
+    window.addEventListener('DOMContentLoaded', () => { 
+      initBgSlideshow(); 
+      initTableList(); 
+
+      // 起動中ローディングをスムーズにフェードアウト
+      setTimeout(() => {
+        const loader = document.getElementById('loading-screen');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => { loader.style.display = 'none'; }, 1000);
+        }
+      }, 600);
+    });
 
     function initBgSlideshow() {
       const container = document.getElementById('bg-slideshow');
@@ -442,7 +485,6 @@
     function resetAllSelection() {
       selectedFiles = []; fileInput.value = ''; document.getElementById('user-message').value = '';
       confirmNameGroup.style.display = 'none';
-      document.getElementById('preview-grid').innerHTML = '';
       document.getElementById('upload-btn').style.display = 'flex';
       document.getElementById('add-btn').style.display = 'flex';
       document.getElementById('reset-btn').style.display = 'flex';
@@ -472,14 +514,13 @@
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
         
-        // 💡 履歴の保存上限を50件に大幅に引き上げ
         history.unshift({ 
           id: Date.now(), 
           date: dateStr, 
           tableNo: tableNo, 
           userName: userName || '匿名', 
           count: fileDataArray.length, 
-          thumbnails: fileDataArray.map(f => f.base64Data) // 全てのサムネイルを保持
+          thumbnails: fileDataArray.map(f => f.base64Data)
         });
         
         if (history.length > 50) history.pop();
@@ -487,7 +528,6 @@
       } catch (e) {}
     }
 
-    // 📂 ドロップダウン式の送信履歴レンダリング関数
     function renderHistoryList() {
       const container = document.getElementById('history-list-container'); 
       container.innerHTML = '';
@@ -502,7 +542,6 @@
         const historyItem = document.createElement('div');
         historyItem.className = 'history-item';
 
-        // ヘッダー部分（クリックで開閉）
         const summary = document.createElement('div');
         summary.className = 'history-summary';
         summary.innerHTML = `
@@ -516,7 +555,6 @@
           </div>
         `;
 
-        // ドロップダウンの中身（サムネイル一覧）
         const content = document.createElement('div');
         content.className = 'history-content';
         
@@ -530,10 +568,7 @@
         });
         content.appendChild(grid);
 
-        // クリックイベントでアコーディオン開閉
-        summary.onclick = () => {
-          historyItem.classList.toggle('active');
-        };
+        summary.onclick = () => { historyItem.classList.toggle('active'); };
 
         historyItem.appendChild(summary);
         historyItem.appendChild(content);
