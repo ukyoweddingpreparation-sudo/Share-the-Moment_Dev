@@ -49,10 +49,10 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* ⏳ 起動中ローディング画面（画像のデザイン＆5秒保持対応） */
+    /* ⏳ 起動中ローディング画面（裏側が絶対に透けない完全独立オーバーレイ構造） */
     #loading-screen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: #0b0b0b; z-index: 99999;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+      background: #0b0b0b; z-index: 999999;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       transition: opacity 1.5s ease-in-out;
       background-image: linear-gradient(rgba(11,11,11,0.5), rgba(11,11,11,0.7)), url('https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1920');
@@ -141,7 +141,6 @@
     .chat-container { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
     .chat-row { display: flex; align-items: flex-start; gap: 8px; opacity: 0; transform: translateY(12px); }
     
-    /* 💡 起動時にアニメーションを確実に発動させるためのクラス */
     .chat-row.play-animation:nth-child(1) { animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards; }
     .chat-row.play-animation:nth-child(2) { animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) 1.5s forwards; }
     .chat-row.play-animation:nth-child(3) { animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) 2.8s forwards; }
@@ -237,7 +236,7 @@
 </head>
 <body>
 
-  <!-- ⏳ 起動中ローディング画面（5秒保持＆ラグジュアリーデザイン） -->
+  <!-- ⏳ 起動中ローディング画面（完全に独立したオーバーレイ） -->
   <div id="loading-screen">
     <div class="loading-content">
       <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
@@ -373,7 +372,7 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント（本番事前登録QA ＋ 最新QAを統合） -->
+    <!-- 💡 使い方のヒント（本番事前登録QA ＋ 最新QAを完全網羅） -->
     <div id="help-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
@@ -392,23 +391,52 @@
         </div>
       </div>
 
-      <!-- QA 2: 写真の枚数制限 -->
+      <!-- QA 2: 何枚まで送れますか？ -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 写真は一度に何枚まで送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
-          一度に複数枚の写真を選択してまとめてアップロードすることができます。お気に入りの思い出をたくさんお送りください！
+          一度に複数枚（推奨：10〜20枚程度）まとめて選択し、送信することができます。回数に制限はありませんので、何度でも送っていただけます。
         </div>
       </div>
 
-      <!-- QA 3: 送信先 -->
+      <!-- QA 3: 動画は送れますか？ -->
       <div class="help-item" onclick="this.classList.toggle('active')">
-        <div class="help-question">Q. 送信した写真はどこに反映されますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-question">Q. 動画は送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
-          お送りいただいたお写真とお祝いメッセージは、会場のスクリーンにリアルタイムで自動投影されます。また、左上のメニューから「送信履歴」を開くことでご自身が送った写真の記録も確認できます。
+          現在は画像（写真）のみの対応となっております。iPhoneの方はLive Photosではなく、通常の写真として選択して送信してください。
         </div>
       </div>
 
-      <!-- QA 4: 画面不具合時のリロード -->
+      <!-- QA 4: 送った写真は誰が見れますか？ -->
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. 送った写真は誰が見れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          お送りいただいた写真は、新郎新婦の専用アルバムにのみ直接保存されます。他のゲストの方に公開されることはありませんので、安心してお送りください。
+        </div>
+      </div>
+
+      <!-- QA 5: エラーが出て送れません -->
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. エラーが出て送れません <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          電波状況が悪い場所では送信に失敗する場合があります。少し時間をおいてから再度お試しいただくか、一度に選択する枚数を減らしてお試しください。
+        </div>
+      </div>
+
+      <!-- QA 6: 送信履歴が見なくなりました -->
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. 送信履歴が見なくなりました <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          送信履歴はご利用の端末（ブラウザ）にのみ保存される仕組みです。そのため、以下の場合は履歴がリセットされます。<br><br>
+          ・「プライベートブラウザ（シークレットモード）」で開いていた画面を閉じた場合<br>
+          ・ブラウザの閲覧履歴やキャッシュを削除した場合<br>
+          ・LINEなどのアプリ内ブラウザと、SafariやChromeなどのブラウザを行き来した場合<br>
+          ・別のスマートフォンからアクセスした場合<br><br>
+          ※履歴が消えてしまっても、送信済みの写真は新郎新婦にしっかりと届いておりますのでご安心ください。
+        </div>
+      </div>
+
+      <!-- QA 7: 画面不具合時のリロード -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 画面が正常に表示されない・固まったときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -516,7 +544,6 @@
       document.getElementById('history-screen').style.display = (screenName === 'history') ? 'block' : 'none';
       document.getElementById('help-screen').style.display = (screenName === 'help') ? 'block' : 'none';
       
-      // ホーム画面に戻った際にもチャットアニメーションを再度美しく再生する
       if (screenName === 'select') {
         triggerChatAnimation();
       }
