@@ -15,14 +15,12 @@
     })();
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SharetheMoments</title>
   
-  <!-- 📱 ホーム画面用アイコン（GitHub上の App-icon②.jpg を指定） -->
   <link rel="apple-touch-icon" href="./App-icon②.jpg">
   <link rel="icon" href="./App-icon②.jpg">
   
-  <!-- 🏷️ PWA設定（表示名を SharetheMoments に設定） -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SharetheMoments">
@@ -49,12 +47,12 @@
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
     body {
-      font-family: var(--font-sans); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 12px; color: var(--text-main); position: relative; overflow-x: hidden;
+      font-family: var(--font-sans); min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; color: var(--text-main); position: relative; overflow-x: hidden;
       background: linear-gradient(-45deg, #e2d1c3, #d5c5c8, #b8c6db, #cbd5e1); background-size: 400% 400%; animation: gradientBG 18s ease infinite;
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* ⏳ 起動中ローディング画面（裏側が完全に透けないよう固定・全画面を完全に覆う構造） */
+    /* ⏳ 起動中ローディング画面（画面全体を完全に覆う独立オーバーレイ） */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
       background: #0b0b0b; z-index: 999999;
@@ -106,7 +104,7 @@
     .bg-slide.active { opacity: 0.6; }
 
     .menu-trigger {
-      position: fixed; top: 16px; left: 16px; z-index: 100; width: 42px; height: 42px; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.9);
+      position: fixed; top: max(16px, env(safe-area-inset-top)); left: 16px; z-index: 100; width: 42px; height: 42px; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.9);
       border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); transition: all 0.2s ease;
     }
     .menu-trigger:active { transform: scale(0.92); }
@@ -114,7 +112,7 @@
 
     .container {
       width: 100%; max-width: 380px; background: rgba(255, 255, 255, 0.58) !important; backdrop-filter: blur(25px); border: 1.5px solid rgba(255, 255, 255, 0.85);
-      border-radius: var(--border-radius); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 20px 16px; position: relative; z-index: 1; margin-top: 20px;
+      border-radius: var(--border-radius); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 20px 16px; position: relative; z-index: 1; margin-top: 35px;
     }
     .header-img { width: 100%; height: 120px; object-fit: cover; border-radius: 14px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid rgba(255, 255, 255, 0.7); }
     .title-area { text-align: center; margin-bottom: 14px; }
@@ -241,7 +239,7 @@
 </head>
 <body>
 
-  <!-- ⏳ 起動中ローディング画面（裏側が完全に隠れる独立オーバーレイ） -->
+  <!-- ⏳ 起動中ローディング画面（フル画面独立オーバーレイ） -->
   <div id="loading-screen">
     <div class="loading-content">
       <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
@@ -377,22 +375,24 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント（全てのQA項目を網羅） -->
+    <!-- 💡 使い方のヒント（最新のホーム画面追加手順に更新済み） -->
     <div id="help-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
       
-      <!-- QA 1 -->
+      <!-- QA 1: ホーム画面に追加（スクショの最新手順に合わせました） -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. アプリのようにホーム画面に追加するには？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
           ホーム画面に追加しておくと、いつでもすぐに写真を送れて便利です。<br><br>
           <strong>🍎 iPhone (Safari) の場合</strong><br>
-          1. 画面下部のシェアアイコンをタップ<br>
-          2. メニューから「ホーム画面に追加」をタップ<br><br>
+          1. 画面下部の <span class="material-symbols-rounded" style="font-size:0.9rem; vertical-align:middle;">ios_share</span> (共有) アイコンをタップ<br>
+          2. メニューを下へスクロールし「ホーム画面に追加」をタップ<br>
+          3. 右上の「追加」をタップ<br><br>
           <strong>🤖 Android (Chrome) の場合</strong><br>
-          1. 画面右上のメニューアイコンをタップ<br>
-          2. 「ホーム画面に追加」をタップ
+          1. 画面右上の <span class="material-symbols-rounded" style="font-size:0.9rem; vertical-align:middle;">more_vert</span> (メニュー) アイコンをタップ<br>
+          2. 「ホーム画面に追加」をタップ<br>
+          3. 「追加」をタップ
         </div>
       </div>
 
@@ -471,26 +471,23 @@
       initBgSlideshow(); 
       initTableList(); 
 
-      // 💡 起動処理の速さに関わらず、必ず「5秒間（5000ミリ秒）」この画面を表示し続ける
       setTimeout(() => {
         const loader = document.getElementById('loading-screen');
         if (loader) {
           loader.style.opacity = '0';
           setTimeout(() => { 
             loader.style.display = 'none'; 
-            // 💡 ローディングが消えてホーム画面になった瞬間に、LINEチャット風アニメーションを確実に発動させる
             triggerChatAnimation();
-          }, 1500); // 1.5秒かけて優しくフェードアウト
+          }, 1500);
         }
       }, 5000); 
     });
 
-    // 💬 LINEチャット風アニメーションを再トリガーする関数
     function triggerChatAnimation() {
       const rows = document.querySelectorAll('.chat-row');
       rows.forEach(row => {
         row.classList.remove('play-animation');
-        void row.offsetWidth; // DOMリフローを発生させてアニメーションをリセット
+        void row.offsetWidth;
         row.classList.add('play-animation');
       });
     }
