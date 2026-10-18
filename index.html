@@ -52,7 +52,7 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* ⏳ 起動中ローディング画面（画面全体を完全に覆う独立オーバーレイ） */
+    /* ⏳ 起動中ローディング画面 */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
       background: #0b0b0b; z-index: 999999;
@@ -61,40 +61,21 @@
       background-image: linear-gradient(rgba(11,11,11,0.5), rgba(11,11,11,0.7)), url('https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1920');
       background-size: cover; background-position: center;
     }
-    .loading-content {
-      text-align: center; padding: 20px;
-      animation: fadeInContent 1.5s ease-out;
-    }
-    .loading-subtitle {
-      font-family: var(--font-en); font-size: 0.95rem; font-weight: 500; color: #d4af37;
-      letter-spacing: 0.25em; margin-bottom: 10px; text-transform: uppercase;
-    }
-    .loading-title {
-      font-family: var(--font-en); font-size: 2.4rem; color: #ffffff;
-      letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    }
-    .loading-date {
-      font-family: var(--font-en); font-size: 0.95rem; color: #d4af37;
-      letter-spacing: 0.2em; font-style: italic; margin-bottom: 40px;
-    }
-    @keyframes fadeInContent {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
+    .loading-content { text-align: center; padding: 20px; animation: fadeInContent 1.5s ease-out; }
+    .loading-subtitle { font-family: var(--font-en); font-size: 0.95rem; font-weight: 500; color: #d4af37; letter-spacing: 0.25em; margin-bottom: 10px; text-transform: uppercase; }
+    .loading-title { font-family: var(--font-en); font-size: 2.4rem; color: #ffffff; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500; text-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+    .loading-date { font-family: var(--font-en); font-size: 0.95rem; color: #d4af37; letter-spacing: 0.2em; font-style: italic; margin-bottom: 40px; }
+    @keyframes fadeInContent { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
-    /* 右下のシステム接続中…ステータス */
     .loading-status-badge {
       position: absolute; bottom: 30px; right: 30px;
       background: rgba(15, 15, 15, 0.75); backdrop-filter: blur(10px);
       border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 20px;
       padding: 8px 18px; display: flex; align-items: center; gap: 8px;
-      font-family: var(--font-serif); font-size: 0.8rem; color: #f5f2eb;
-      letter-spacing: 0.05em;
+      font-family: var(--font-serif); font-size: 0.8rem; color: #f5f2eb; letter-spacing: 0.05em;
     }
     .loading-dot {
-      width: 8px; height: 8px; background-color: #d4af37; border-radius: 50%;
-      box-shadow: 0 0 8px #d4af37;
+      width: 8px; height: 8px; background-color: #d4af37; border-radius: 50%; box-shadow: 0 0 8px #d4af37;
       animation: pulseDot 1.5s infinite ease-in-out;
     }
     @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
@@ -198,7 +179,15 @@
 
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; }
-    .sidebar-drawer { position: fixed; top: 0; left: 0; width: 260px; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1); z-index: 1001; transform: translateX(-100%); transition: transform 0.35s ease; padding: 24px 18px; }
+    
+    /* 📱 MENUドロワー：ノッチや時刻表示に被らないよう上部にセーフエリア分の余裕を確保 */
+    .sidebar-drawer { 
+      position: fixed; top: 0; left: 0; width: 260px; height: 100%; 
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); 
+      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1); z-index: 1001; 
+      transform: translateX(-100%); transition: transform 0.35s ease; 
+      padding: max(28px, env(safe-area-inset-top)) 18px 24px 18px; 
+    }
     .sidebar-overlay.active .sidebar-drawer { transform: translateX(0); }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
     .sidebar-title { font-family: var(--font-title); font-size: 1.1rem; color: var(--primary-gold); font-weight: 700; }
@@ -239,7 +228,7 @@
 </head>
 <body>
 
-  <!-- ⏳ 起動中ローディング画面（フル画面独立オーバーレイ） -->
+  <!-- ⏳ 起動中ローディング画面 -->
   <div id="loading-screen">
     <div class="loading-content">
       <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
@@ -375,12 +364,12 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント（最新のホーム画面追加手順に更新済み） -->
+    <!-- 💡 使い方のヒント -->
     <div id="help-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
       
-      <!-- QA 1: ホーム画面に追加（スクショの最新手順に合わせました） -->
+      <!-- QA 1 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. アプリのようにホーム画面に追加するには？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -466,7 +455,6 @@
 
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec";
 
-    // 🚀 アプリ起動時の初期化＆5秒間のラグジュアリー・ローディング演出
     window.addEventListener('DOMContentLoaded', () => { 
       initBgSlideshow(); 
       initTableList(); 
