@@ -26,15 +26,17 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
+    /* 📱 フルスクリーン＆ノッチ・ダイナミックアイランド完全対応 */
     body {
       font-family: var(--font-sans); 
       min-height: 100vh; min-height: 100dvh; 
       display: flex; justify-content: center; align-items: center; 
-      padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)) 16px; 
+      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; 
       color: var(--text-main); 
       position: relative; overflow-x: hidden;
       background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('./help-screen.JPEG');
       background-size: cover; background-position: center; background-repeat: no-repeat;
+      background-attachment: fixed;
     }
 
     .container {
@@ -46,6 +48,8 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2); 
       padding: 24px 16px; 
       position: relative; z-index: 1;
+      margin-top: env(safe-area-inset-top);
+      margin-bottom: env(safe-area-inset-bottom);
     }
     .title-area { text-align: center; margin-bottom: 20px; }
     .en-sub { font-family: var(--font-title); font-size: 0.9rem; letter-spacing: 0.22em; color: var(--primary-gold); font-weight: 700; display: block; margin-bottom: 4px; }
@@ -53,7 +57,15 @@
 
     .input-group { margin-bottom: 16px; text-align: left; }
     .input-group label { display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
-    .required-badge { background: #e11d48; color: white; padding: 3px 7px; border-radius: 6px; font-size: 0.65rem; margin-left: 8px; font-weight: 700; display: inline-block; }
+    
+    /* 🏷️ 「必須」バッジを少し小さく調整してすっきりとしたバランスに */
+    .required-badge { 
+      background: #e11d48; color: white; 
+      padding: 2px 5px; border-radius: 4px; 
+      font-size: 0.58rem; margin-left: 6px; 
+      font-weight: 700; display: inline-block; 
+      vertical-align: middle; 
+    }
 
     .table-trigger-btn, .text-input-field {
       width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.85); color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
@@ -194,7 +206,6 @@
         const res = await response.json();
         if (!res.success) throw new Error(res.error || "送信に失敗しました");
 
-        // ⏱️ カウントダウン表示の処理
         let countdown = 5;
         statusEl.style.color = '#15803d';
         statusEl.innerHTML = `お問い合わせを送信しました。<br>${countdown}秒後にホーム画面に自動遷移します。`;
