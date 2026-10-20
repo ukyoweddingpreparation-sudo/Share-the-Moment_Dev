@@ -26,17 +26,24 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
-    /* 📱 フルスクリーン＆ノッチ・ダイナミックアイランド完全対応 */
+    /* 📱 画面全体に固定して背景画像の見切れを完全に防ぐフルスクリーン設定 */
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100vh;
+      height: 100svh;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: var(--font-sans); 
-      min-height: 100vh; min-height: 100dvh; 
       display: flex; justify-content: center; align-items: center; 
-      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; 
+      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px; 
       color: var(--text-main); 
-      position: relative; overflow-x: hidden;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('./help-screen.JPEG');
       background-size: cover; background-position: center; background-repeat: no-repeat;
-      background-attachment: fixed;
+      overflow-y: auto;
     }
 
     .container {
@@ -48,8 +55,7 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2); 
       padding: 24px 16px; 
       position: relative; z-index: 1;
-      margin-top: env(safe-area-inset-top);
-      margin-bottom: env(safe-area-inset-bottom);
+      margin: auto 0;
     }
     .title-area { text-align: center; margin-bottom: 20px; }
     .en-sub { font-family: var(--font-title); font-size: 0.9rem; letter-spacing: 0.22em; color: var(--primary-gold); font-weight: 700; display: block; margin-bottom: 4px; }
@@ -58,7 +64,6 @@
     .input-group { margin-bottom: 16px; text-align: left; }
     .input-group label { display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
     
-    /* 🏷️ 「必須」バッジを少し小さく調整してすっきりとしたバランスに */
     .required-badge { 
       background: #e11d48; color: white; 
       padding: 2px 5px; border-radius: 4px; 
@@ -74,7 +79,7 @@
     .table-trigger-btn.selected { border-color: var(--primary-gold); color: var(--primary-gold); }
     .text-input-field:focus { border-color: var(--primary-gold); background: rgba(255, 255, 255, 1); }
     .text-input-field::placeholder { color: #94a3b8; font-family: var(--font-sans); }
-    textarea.text-input-field { resize: none; height: 110px; font-family: var(--font-sans); }
+    textarea.text-input-field { resize: none; height: 100px; font-family: var(--font-sans); }
 
     .btn { width: 100%; padding: 13px 16px; border-radius: 14px; font-size: 0.92rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.2s ease; outline: none; border: none; }
     .btn:active { transform: scale(0.97); }
