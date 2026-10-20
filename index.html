@@ -52,7 +52,6 @@
     }
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* ⏳ 起動中ローディング画面 */
     #loading-screen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
       background: #0b0b0b; z-index: 999999;
@@ -175,24 +174,46 @@
     .progress-info { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--primary-gold); }
     #status { font-size: 0.8rem; text-align: center; margin-top: 8px; font-weight: 700; }
     
-    #confirm-screen, #thankyou-screen, #history-screen, #help-screen { display: none; }
+    #confirm-screen, #thankyou-screen, #history-screen, #howto-screen { display: none; }
 
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; }
     
-    /* 📱 MENUドロワー：ノッチや時刻表示に被らないよう上部にセーフエリア分の余裕を確保 */
+    /* 📱 MENUドロワー：高さをフルにして最下部にヘルプボタンを配置できるように調整 */
     .sidebar-drawer { 
       position: fixed; top: 0; left: 0; width: 260px; height: 100%; 
       background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); 
       box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1); z-index: 1001; 
       transform: translateX(-100%); transition: transform 0.35s ease; 
-      padding: max(28px, env(safe-area-inset-top)) 18px 24px 18px; 
+      padding: max(28px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)) 18px; 
+      display: flex; flex-direction: column; justify-content: space-between;
     }
     .sidebar-overlay.active .sidebar-drawer { transform: translateX(0); }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
     .sidebar-title { font-family: var(--font-title); font-size: 1.1rem; color: var(--primary-gold); font-weight: 700; }
-    .sidebar-menu-item { padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 8px; background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); transition: background 0.2s; }
+    
+    .sidebar-menu-list { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+    .sidebar-menu-item { padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333; display: flex; align-items: center; gap: 12px; cursor: pointer; background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); transition: background 0.2s; }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
+
+    /* ⭕ 丸の中に「？」が入ったアイコンのスタイル（画像イメージ再現） */
+    .sidebar-help-btn {
+      padding: 12px 14px; border-radius: 30px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(212, 175, 55, 0.4);
+      display: flex; align-items: center; gap: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: auto; transition: transform 0.2s;
+    }
+    .sidebar-help-btn:active { transform: scale(0.97); }
+    .help-icon-circle {
+      width: 32px; height: 32px; background: #64748b; color: #ffffff; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center; font-size: 1rem; font-weight: 700;
+    }
+    .sidebar-help-text { font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
+
+    .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+    .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .help-answer { padding: 0 14px; max-height: 0; font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; transition: all 0.3s ease; opacity: 0; }
+    .help-item.active .help-answer { padding: 0 14px 14px; max-height: 600px; opacity: 1; }
+    .help-item.active .help-icon { transform: rotate(180deg); }
+    .help-icon { transition: transform 0.3s ease; color: var(--primary-gold); }
 
     .history-item { background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 14px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s ease; }
     .history-summary { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
@@ -206,13 +227,6 @@
     .history-thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .history-thumb-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.8); }
     .history-thumb-item img { width: 100%; height: 100%; object-fit: cover; }
-
-    .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
-    .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .help-answer { padding: 0 14px; max-height: 0; font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; transition: all 0.3s ease; opacity: 0; }
-    .help-item.active .help-answer { padding: 0 14px 14px; max-height: 600px; opacity: 1; }
-    .help-item.active .help-icon { transform: rotate(180deg); }
-    .help-icon { transition: transform 0.3s ease; color: var(--primary-gold); }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(10px); z-index: 999; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; visibility: hidden; transition: all 0.25s ease; }
     .modal-overlay.active { opacity: 1; visibility: visible; }
@@ -228,7 +242,6 @@
 </head>
 <body>
 
-  <!-- ⏳ 起動中ローディング画面 -->
   <div id="loading-screen">
     <div class="loading-content">
       <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
@@ -249,13 +262,23 @@
 
   <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebarOnOutside(event)">
     <div class="sidebar-drawer">
-      <div class="sidebar-header">
-        <span class="sidebar-title">MENU</span>
-        <div style="cursor:pointer; color:#888;" onclick="closeSidebar()"><span class="material-symbols-rounded">close</span></div>
+      <div>
+        <div class="sidebar-header">
+          <span class="sidebar-title">MENU</span>
+          <div style="cursor:pointer; color:#888;" onclick="closeSidebar()"><span class="material-symbols-rounded">close</span></div>
+        </div>
+        <div class="sidebar-menu-list">
+          <div class="sidebar-menu-item" onclick="navigate('select')"><span class="material-symbols-rounded">home</span> ホームに戻る</div>
+          <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> 送信履歴を見る</div>
+          <div class="sidebar-menu-item" onclick="navigate('howto')"><span class="material-symbols-rounded">lightbulb</span> 使い方のヒント</div>
+        </div>
       </div>
-      <div class="sidebar-menu-item" onclick="navigate('select')"><span class="material-symbols-rounded">home</span> ホームに戻る</div>
-      <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> 送信履歴を見る</div>
-      <div class="sidebar-menu-item" onclick="navigate('help')"><span class="material-symbols-rounded">lightbulb</span> 使い方のヒント</div>
+
+      <!-- ⭕ 画像の通り一番下に配置された「？」付きヘルプボタン（help.htmlへ遷移） -->
+      <div class="sidebar-help-btn" onclick="location.href='help.html'">
+        <div class="help-icon-circle">?</div>
+        <span class="sidebar-help-text">ヘルプ</span>
+      </div>
     </div>
   </div>
 
@@ -364,12 +387,11 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント -->
-    <div id="help-screen">
+    <!-- 💡 使い方のヒント（#howto-screen として独立保持） -->
+    <div id="howto-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
       
-      <!-- QA 1 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. アプリのようにホーム画面に追加するには？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -385,7 +407,6 @@
         </div>
       </div>
 
-      <!-- QA 2 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 写真は一度に何枚まで送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -393,7 +414,6 @@
         </div>
       </div>
 
-      <!-- QA 3 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 動画は送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -401,7 +421,6 @@
         </div>
       </div>
 
-      <!-- QA 4 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 送った写真は誰が見れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -409,7 +428,6 @@
         </div>
       </div>
 
-      <!-- QA 5 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. エラーが出て送れません <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -417,7 +435,6 @@
         </div>
       </div>
 
-      <!-- QA 6 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 送信履歴が見なくなりました <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -430,7 +447,6 @@
         </div>
       </div>
 
-      <!-- QA 7 -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 画面が正常に表示されない・固まったときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -452,7 +468,6 @@
   <script>
     const bgImages = ['https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000', 'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000', 'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000'];
     const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q'];
-
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec";
 
     window.addEventListener('DOMContentLoaded', () => { 
@@ -501,6 +516,7 @@
 
     function initTableList() {
       const container = document.getElementById('table-list-container');
+      container.innerHTML = '';
       tables.forEach(tableVal => {
         const item = document.createElement('div');
         item.className = 'table-list-item';
@@ -509,10 +525,10 @@
           document.getElementById('table-no').value = tableVal;
           document.getElementById('table-trigger-text').innerText = `✓ ${tableVal}`;
           document.getElementById('table-trigger').classList.add('selected');
+          document.getElementById('select-status').innerText = '';
           document.querySelectorAll('.table-list-item').forEach(i => { i.classList.remove('selected'); i.querySelector('.check-mark').style.visibility = 'hidden'; });
           item.classList.add('selected');
           item.querySelector('.check-mark').style.visibility = 'visible';
-          document.getElementById('select-status').innerText = '';
           setTimeout(() => document.getElementById('table-modal').classList.remove('active'), 200);
         };
         container.appendChild(item);
@@ -532,7 +548,7 @@
       document.getElementById('confirm-screen').style.display = (screenName === 'confirm') ? 'block' : 'none';
       document.getElementById('thankyou-screen').style.display = (screenName === 'thankyou') ? 'block' : 'none';
       document.getElementById('history-screen').style.display = (screenName === 'history') ? 'block' : 'none';
-      document.getElementById('help-screen').style.display = (screenName === 'help') ? 'block' : 'none';
+      document.getElementById('howto-screen').style.display = (screenName === 'howto') ? 'block' : 'none';
       
       if (screenName === 'select') {
         triggerChatAnimation();
@@ -581,7 +597,9 @@
     });
 
     function resetAllSelection() {
-      selectedFiles = []; fileInput.value = ''; document.getElementById('user-message').value = '';
+      selectedFiles = []; 
+      if (fileInput) fileInput.value = ''; 
+      document.getElementById('user-message').value = '';
       confirmNameGroup.style.display = 'none';
       document.getElementById('upload-btn').style.display = 'flex';
       document.getElementById('add-btn').style.display = 'flex';
@@ -618,10 +636,10 @@
           tableNo: tableNo, 
           userName: userName || '匿名', 
           count: fileDataArray.length, 
-          thumbnails: fileDataArray.map(f => f.base64Data)
+          thumbnails: fileDataArray.map(f => f.base64Data).slice(0, 8)
         });
         
-        if (history.length > 50) history.pop();
+        if (history.length > 20) history.pop();
         localStorage.setItem('wedding_history', JSON.stringify(history));
       } catch (e) {}
     }
@@ -754,7 +772,7 @@
             if (!res.success) throw new Error(res.error);
             targetFolderId = res.folderId;
             uploadedPhotoCount += chunk.length;
-            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`);
+            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`,);
           }
         }
       } catch (err) {
