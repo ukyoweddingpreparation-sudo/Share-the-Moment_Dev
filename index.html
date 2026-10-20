@@ -179,7 +179,6 @@
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; }
     
-    /* 📱 MENUドロワー：他のメニューと同じカード型デザインに完全に統一 */
     .sidebar-drawer { 
       position: fixed; top: 0; left: 0; width: 260px; height: 100%; 
       background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); 
@@ -194,7 +193,6 @@
     
     .sidebar-menu-list { display: flex; flex-direction: column; gap: 8px; }
     
-    /* 他のメニュー項目と全く同じクラス＆見た目（角丸カード型） */
     .sidebar-menu-item { 
       padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333; 
       display: flex; align-items: center; gap: 12px; cursor: pointer; 
@@ -202,12 +200,6 @@
       transition: background 0.2s; 
     }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
-
-    /* ⭕ 他のメニューと同じカード型の中に配置する丸型「？」アイコンのスタイル */
-    .help-icon-circle {
-      width: 24px; height: 24px; background: var(--primary-gold); color: #ffffff; border-radius: 50%;
-      display: flex; justify-content: center; align-items: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
-    }
 
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
     .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
@@ -275,9 +267,9 @@
         </div>
       </div>
 
-      <!-- ⭕ 画像の通り一番下に配置しつつ、他のメニューと同じカード型デザインに統一したヘルプボタン -->
-      <div class="sidebar-menu-item" onclick="location.href='help.html'" style="margin-top: auto;">
-        <div class="help-icon-circle">?</div>
+      <!-- ⭕ 上の3つと完全に見た目を合わせたヘルプボタン -->
+      <div class="sidebar-menu-item" onclick="location.href='help.html'">
+        <span class="material-symbols-rounded">help</span>
         <span>ヘルプ</span>
       </div>
     </div>
