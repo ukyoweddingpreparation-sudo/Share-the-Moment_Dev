@@ -25,15 +25,28 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
+    /* 📱 ホーム画面と同様のフルスクリーン＆ノッチ対応背景設定 */
     body {
-      font-family: var(--font-sans); min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; color: var(--text-main); position: relative; overflow-x: hidden;
-      background: linear-gradient(-45deg, #e2d1c3, #d5c5c8, #b8c6db, #cbd5e1); background-size: 400% 400%; animation: gradientBG 18s ease infinite;
+      font-family: var(--font-sans); 
+      min-height: 100vh; min-height: 100dvh; 
+      display: flex; justify-content: center; align-items: center; 
+      padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)) 16px; 
+      color: var(--text-main); 
+      position: relative; overflow-x: hidden;
+      /* GitHub上の画像リソースを指定（同じリポジトリ内であれば ./help-screen.JPEG） */
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('./help-screen.JPEG');
+      background-size: cover; background-position: center; background-repeat: no-repeat;
     }
-    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
     .container {
-      width: 100%; max-width: 380px; background: rgba(255, 255, 255, 0.58) !important; backdrop-filter: blur(25px); border: 1.5px solid rgba(255, 255, 255, 0.85);
-      border-radius: var(--border-radius); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 16px; position: relative; z-index: 1;
+      width: 100%; max-width: 380px; 
+      background: rgba(255, 255, 255, 0.72) !important; 
+      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: var(--border-radius); 
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2); 
+      padding: 24px 16px; 
+      position: relative; z-index: 1;
     }
     .title-area { text-align: center; margin-bottom: 20px; }
     .en-sub { font-family: var(--font-title); font-size: 0.9rem; letter-spacing: 0.22em; color: var(--primary-gold); font-weight: 700; display: block; margin-bottom: 4px; }
@@ -44,11 +57,11 @@
     .required-badge { background: #e11d48; color: white; padding: 3px 7px; border-radius: 6px; font-size: 0.65rem; margin-left: 8px; font-weight: 700; display: inline-block; }
 
     .table-trigger-btn, .text-input-field {
-      width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.65); color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
+      width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.85); color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
     }
     .table-trigger-btn { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
     .table-trigger-btn.selected { border-color: var(--primary-gold); color: var(--primary-gold); }
-    .text-input-field:focus { border-color: var(--primary-gold); background: rgba(255, 255, 255, 0.85); }
+    .text-input-field:focus { border-color: var(--primary-gold); background: rgba(255, 255, 255, 1); }
     .text-input-field::placeholder { color: #94a3b8; }
     textarea.text-input-field { resize: none; height: 110px; font-family: var(--font-sans); }
 
@@ -56,7 +69,7 @@
     .btn:active { transform: scale(0.97); }
     .btn-primary { font-family: var(--font-serif); background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%); color: #ffffff; box-shadow: 0 6px 15px rgba(184, 151, 83, 0.3); }
     .btn-primary:disabled { background: #cbd5e1; color: #94a3b8; box-shadow: none; cursor: not-allowed; }
-    .btn-secondary { background: rgba(255, 255, 255, 0.4); color: #475569; border: 1px solid rgba(255, 255, 255, 0.6); margin-top: 10px; }
+    .btn-secondary { background: rgba(255, 255, 255, 0.6); color: #475569; border: 1px solid rgba(255, 255, 255, 0.8); margin-top: 10px; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(10px); z-index: 999; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; visibility: hidden; transition: all 0.25s ease; }
     .modal-overlay.active { opacity: 1; visibility: visible; }
@@ -98,14 +111,13 @@
       <textarea id="user-message" class="text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。" maxlength="200" oninput="validateForm()"></textarea>
     </div>
 
-    <!-- 画面下部に配置された送信ボタン（条件が揃うまで非活性） -->
     <button id="submit-btn" class="btn btn-primary" disabled onclick="sendInquiry()">
       <span class="material-symbols-rounded">send</span>送信する
     </button>
     <button class="btn btn-secondary" onclick="location.href='index.html'">
       <span class="material-symbols-rounded">home</span>ホームに戻る
     </button>
-    <div id="status" style="font-size: 0.8rem; text-align: center; font-weight: 700; margin-top: 10px;"></div>
+    <div id="status" style="font-size: 0.8rem; text-align: center; font-weight: 700; margin-top: 10px; line-height: 1.5;"></div>
   </div>
 
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
@@ -147,7 +159,6 @@
     function openTableModal() { document.getElementById('table-modal').classList.add('active'); }
     function closeTableModalOnOutside(e) { if (e.target.id === 'table-modal') document.getElementById('table-modal').classList.remove('active'); }
 
-    // すべて入力されているかチェックし、送信ボタンを活性化
     function validateForm() {
       const tableNo = document.getElementById('table-no').value.trim();
       const name = document.getElementById('user-name').value.trim();
@@ -184,11 +195,14 @@
         const res = await response.json();
         if (!res.success) throw new Error(res.error || "送信に失敗しました");
 
+        // 🟢 送信成功：5秒のウェイト処理とメッセージ表示
         statusEl.style.color = '#15803d';
-        statusEl.innerText = 'お問い合わせを送信しました。ありがとうございました！';
+        statusEl.innerHTML = 'お問い合わせを送信しました。<br>まもなく起動画面（ホーム）に戻ります...';
+        
         setTimeout(() => {
           location.href = 'index.html';
-        }, 2000);
+        }, 5000); // 5000ミリ秒（5秒）待機
+
       } catch (err) {
         statusEl.style.color = '#c53030';
         statusEl.innerText = 'エラー: ' + err.message;
@@ -198,4 +212,3 @@
   </script>
 </body>
 </html>
-
