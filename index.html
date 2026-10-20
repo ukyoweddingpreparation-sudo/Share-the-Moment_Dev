@@ -60,11 +60,25 @@
       background-image: linear-gradient(rgba(11,11,11,0.5), rgba(11,11,11,0.7)), url('https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1920');
       background-size: cover; background-position: center;
     }
-    .loading-content { text-align: center; padding: 20px; animation: fadeInContent 1.5s ease-out; }
+    .loading-content { text-align: center; padding: 20px; }
     .loading-subtitle { font-family: var(--font-en); font-size: 0.95rem; font-weight: 500; color: #d4af37; letter-spacing: 0.25em; margin-bottom: 10px; text-transform: uppercase; }
-    .loading-title { font-family: var(--font-en); font-size: 2.4rem; color: #ffffff; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500; text-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+    
+    /* ✨ 文字が波打つ（ウェーブする）エフェクトのスタイル */
+    .loading-title { 
+      font-family: var(--font-en); font-size: 2.4rem; color: #ffffff; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500; text-shadow: 0 4px 20px rgba(0,0,0,0.6); 
+      display: flex; justify-content: center; gap: 0.02em;
+    }
+    .loading-title span {
+      display: inline-block;
+      animation: waveText 2s infinite ease-in-out;
+      animation-delay: calc(var(--i) * 0.08s);
+    }
+    @keyframes waveText {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); color: #f3e5ab; text-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
+    }
+
     .loading-date { font-family: var(--font-en); font-size: 0.95rem; color: #d4af37; letter-spacing: 0.2em; font-style: italic; margin-bottom: 40px; }
-    @keyframes fadeInContent { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
     .loading-status-badge {
       position: absolute; bottom: 30px; right: 30px;
@@ -238,7 +252,8 @@
   <div id="loading-screen">
     <div class="loading-content">
       <div class="loading-subtitle">Real-time Photo &amp; Message Sync</div>
-      <div class="loading-title">L'Éternel Moment</div>
+      <!-- ✨ 文字を1文字ずつ分割して波打ちエフェクトを適用 -->
+      <div class="loading-title" id="wave-title"></div>
       <div class="loading-date">October 25, 2026</div>
     </div>
     <div class="loading-status-badge">
@@ -267,7 +282,6 @@
         </div>
       </div>
 
-      <!-- ⭕ 上の3つと完全に見た目を合わせたヘルプボタン -->
       <div class="sidebar-menu-item" onclick="location.href='help.html'">
         <span class="material-symbols-rounded">help</span>
         <span>ヘルプ</span>
@@ -464,6 +478,7 @@
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec";
 
     window.addEventListener('DOMContentLoaded', () => { 
+      initWaveTitle();
       initBgSlideshow(); 
       initTableList(); 
 
@@ -478,6 +493,26 @@
         }
       }, 5000); 
     });
+
+    // ✨ タイトル文字を1文字ずつ分割して波打ち用のインデックスを付与する関数
+    function initWaveTitle() {
+      const container = document.getElementById('wave-title');
+      const text = "L'Éternel Moment";
+      container.innerHTML = '';
+      let charIdx = 0;
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        const char = text[i];
+        if (char === ' ') {
+          span.innerHTML = '&nbsp;';
+        } else {
+          span.innerText = char;
+          span.style.setProperty('--i', charIdx);
+          charIdx++;
+        }
+        container.appendChild(span);
+      }
+    }
 
     function triggerChatAnimation() {
       const rows = document.querySelectorAll('.chat-row');
@@ -765,7 +800,7 @@
             if (!res.success) throw new Error(res.error);
             targetFolderId = res.folderId;
             uploadedPhotoCount += chunk.length;
-            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`);
+            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`,);
           }
         }
       } catch (err) {
