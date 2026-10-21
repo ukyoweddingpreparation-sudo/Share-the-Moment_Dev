@@ -196,36 +196,69 @@
       position: fixed; top: 0; left: 0; width: 260px; height: 100%; 
       background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); 
       box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1); z-index: 1001; 
-      transform: translateX(-100%); transition: transform 0.35s ease; 
+      transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1); 
       padding: max(28px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)) 18px; 
       display: flex; flex-direction: column; justify-content: space-between;
       overflow-y: auto;
     }
     .sidebar-overlay.active .sidebar-drawer { transform: translateX(0); }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
-    .sidebar-title { font-family: var(--font-title); font-size: 1.1rem; color: var(--primary-gold); font-weight: 700; }
+    .sidebar-title { font-family: var(--font-en); font-size: 1.3rem; color: var(--primary-gold); font-weight: 700; letter-spacing: 0.1em; }
     
     .sidebar-menu-list { display: flex; flex-direction: column; gap: 8px; }
     
+    /* 🌟 各メニュー項目のデザイン（英語表記・エレガントなフォント） */
+    .sidebar-menu-item, .sidebar-sub-item {
+      font-family: var(--font-en);
+      letter-spacing: 0.05em;
+    }
+
     .sidebar-menu-item { 
-      padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333; 
+      padding: 14px; border-radius: 12px; font-size: 1.05rem; font-weight: 600; color: #333; 
       display: flex; align-items: center; gap: 12px; cursor: pointer; 
       background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); 
-      transition: background 0.2s; 
+      /* ③ 左からのフェードイン・スライドインアニメーション初期状態 */
+      opacity: 0; transform: translateX(-25px);
+      transition: background 0.2s;
     }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
+
+    /* ③ サイドバー展開時に各メニューが左から順番にフワッとスライドインする演出 */
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(1) {
+      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.08s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.08s, background 0.2s;
+    }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item.accordion-parent {
+      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.14s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.14s, background 0.2s;
+    }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(4) {
+      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.20s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.20s, background 0.2s;
+    }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(5) {
+      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.26s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.26s, background 0.2s;
+    }
 
     /* 階層型アコーディオンメニュー用のスタイル */
     .submenu-container { display: flex; flex-direction: column; gap: 4px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding-left: 12px; }
     .sidebar-menu-item.accordion-parent.active + .submenu-container { max-height: 200px; }
+    
     .sidebar-sub-item {
-      padding: 10px 14px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; color: #475569;
+      padding: 10px 14px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; color: #475569;
       display: flex; align-items: center; gap: 10px; cursor: pointer;
       background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(212, 175, 55, 0.15);
+      opacity: 0; transform: translateX(-15px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s;
     }
     .sidebar-sub-item:active { background: rgba(247, 238, 219, 0.8); }
 
-    /* プロフィールカードのスタイル */
+    /* サブメニューが開いたときのフェードイン演出 */
+    .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(1) {
+      opacity: 1; transform: translateX(0); transition-delay: 0.05s;
+    }
+    .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(2) {
+      opacity: 1; transform: translateX(0); transition-delay: 0.10s;
+    }
+
+    /* プロフィールカードのスタイル（①拡張子を .jpeg に修正済み） */
     .profile-card-wrapper {
       position: relative; width: 100%; border-radius: 16px; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.8);
@@ -233,11 +266,11 @@
       background-size: cover; background-position: center;
     }
     .profile-bg-ukyo { 
-      background-image: linear-gradient(rgba(11,11,11,0.35), rgba(11,11,11,0.65)), url('./profile-Ukyo.JPEG'); 
+      background-image: linear-gradient(rgba(11,11,11,0.35), rgba(11,11,11,0.65)), url('./profile-ukyo.jpeg'); 
       background-position: center center;
     }
     .profile-bg-karin { 
-      background-image: linear-gradient(rgba(11,11,11,0.35), rgba(11,11,11,0.65)), url('./profile-Karin.JPEG'); 
+      background-image: linear-gradient(rgba(11,11,11,0.35), rgba(11,11,11,0.65)), url('./profile-karin.jpeg'); 
       background-position: 25% center;
     }
     .profile-glass-box {
@@ -325,19 +358,19 @@
           <div style="cursor:pointer; color:#888;" onclick="closeSidebar()"><span class="material-symbols-rounded">close</span></div>
         </div>
         <div class="sidebar-menu-list">
-          <div class="sidebar-menu-item" onclick="navigate('select')"><span class="material-symbols-rounded">home</span> ホームに戻る</div>
+          <div class="sidebar-menu-item" onclick="navigate('select')"><span class="material-symbols-rounded">home</span> Home</div>
           
-          <!-- 📂 階層型プロフィールメニュー -->
+          <!-- 📂 階層型プロフィールメニュー（英語表記） -->
           <div class="sidebar-menu-item accordion-parent" onclick="this.classList.toggle('active')">
-            <span class="material-symbols-rounded">person</span> プロフィール <span class="material-symbols-rounded" style="margin-left:auto; font-size:1rem;">expand_more</span>
+            <span class="material-symbols-rounded">person</span> Profile <span class="material-symbols-rounded" style="margin-left:auto; font-size:1rem;">expand_more</span>
           </div>
           <div class="submenu-container">
-            <div class="sidebar-sub-item" onclick="navigate('profile-ukyo')"><span class="material-symbols-rounded" style="font-size:0.9rem;">male</span> 新郎 Ukyo プロフィール</div>
-            <div class="sidebar-sub-item" onclick="navigate('profile-karin')"><span class="material-symbols-rounded" style="font-size:0.9rem;">female</span> 新婦 Karin プロフィール</div>
+            <div class="sidebar-sub-item" onclick="navigate('profile-ukyo')"><span class="material-symbols-rounded" style="font-size:0.9rem;">male</span> Ukyo Profile</div>
+            <div class="sidebar-sub-item" onclick="navigate('profile-karin')"><span class="material-symbols-rounded" style="font-size:0.9rem;">female</span> Karin Profile</div>
           </div>
 
-          <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> 送信履歴を見る</div>
-          <div class="sidebar-menu-item" onclick="navigate('howto')"><span class="material-symbols-rounded">lightbulb</span> 使い方のヒント</div>
+          <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> History</div>
+          <div class="sidebar-menu-item" onclick="navigate('howto')"><span class="material-symbols-rounded">lightbulb</span> How to use</div>
         </div>
       </div>
 
@@ -685,9 +718,17 @@
       document.getElementById('thankyou-screen').style.display = (screenName === 'thankyou') ? 'block' : 'none';
       document.getElementById('history-screen').style.display = (screenName === 'history') ? 'block' : 'none';
       document.getElementById('howto-screen').style.display = (screenName === 'howto') ? 'block' : 'none';
+      document.getElementById('profile-ukyo-screen').style.display = (screenName === 'profile-ukyo') ? 'block' : 'none';
+      document.getElementById('profile-karin-screen').style.display = (screenName === 'profile-karin') ? 'block' : 'none';
       
       if (screenName === 'select') {
         triggerChatAnimation();
+      }
+      if (screenName === 'profile-ukyo') {
+        triggerProfileAnimation('ukyo-animation-box');
+      }
+      if (screenName === 'profile-karin') {
+        triggerProfileAnimation('karin-animation-box');
       }
       if (screenName === 'history') renderHistoryList();
       window.scrollTo(0, 0);
