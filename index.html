@@ -256,56 +256,74 @@
       opacity: 1; transform: translateX(0); transition-delay: 0.10s;
     }
 
-    /* 写真主役＆ダークシャドウプロフィールのスタイル */
+    /* 🌟 プロフィールカードの共通スタイル（枠の存在感を軽減・写真主役） */
     .profile-card-wrapper {
       position: relative; width: 100%; height: 440px; border-radius: 18px; overflow: hidden;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.3); border: 1.5px solid rgba(212, 175, 55, 0.5);
-      background-size: cover; background-position: center;
-      display: flex; flex-direction: column; justify-content: flex-end; padding: 20px 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 1px solid rgba(212, 175, 55, 0.3);
+      background-size: cover; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px 14px;
     }
+    
+    /* 新郎：情報を左側寄せ ＆ 背景を右側にフォーカス */
     .profile-bg-ukyo { 
-      background-image: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.35) 50%, rgba(10,10,10,0.15) 100%), url('./profile-ukyo.jpeg'); 
+      background-image: linear-gradient(to right, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-ukyo.jpeg'); 
+      background-position: 80% center;
+      align-items: flex-start;
     }
+    
+    /* 新婦：情報を右側寄せ ＆ 画像を上に上げて見切れ防止 ＆ 背景を左側にフォーカス */
     .profile-bg-karin { 
-      background-image: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.35) 50%, rgba(10,10,10,0.15) 100%), url('./profile-karin.jpeg'); 
+      background-image: linear-gradient(to left, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-karin.jpeg'); 
+      background-position: center 15%; 
+      align-items: flex-end;
     }
 
     .profile-content-area {
-      display: flex; flex-direction: column; gap: 8px; z-index: 2;
+      display: flex; flex-direction: column; gap: 6px; width: 82%; z-index: 2;
     }
+    
     .profile-name-title {
-      font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #f3e5ab; letter-spacing: 0.15em;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8); opacity: 0; transform: translateX(-25px);
+      font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: #f3e5ab; letter-spacing: 0.15em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9); opacity: 0; transform: translateX(-20px);
       animation: profileAppear 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.1s forwards;
     }
+    .profile-bg-karin .profile-name-title { text-align: right; transform: translateX(20px); }
+
+    /* 情報ボックスの存在感を軽く（透過度アップ＆枠線細め） */
     .profile-details-box {
-      background: rgba(20, 20, 20, 0.55); backdrop-filter: blur(10px);
-      border-radius: 14px; padding: 12px 14px; border: 1px solid rgba(212, 175, 55, 0.35);
-      display: flex; flex-direction: column; gap: 7px;
+      background: rgba(15, 15, 15, 0.35); backdrop-filter: blur(8px);
+      border-radius: 12px; padding: 10px 12px; border: 0.5px solid rgba(212, 175, 55, 0.25);
+      display: flex; flex-direction: column; gap: 6px;
     }
+    
     .profile-row {
       display: flex; justify-content: space-between; align-items: baseline;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 5px;
-      opacity: 0; transform: translateX(-25px); /* 🌟 左側からスライドインするアニメーション初期状態 */
+      border-bottom: 0.5px solid rgba(212, 175, 55, 0.15); padding-bottom: 4px;
+      opacity: 0; transform: translateX(-20px);
       animation: profileAppear 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
+    .profile-bg-karin .profile-row { transform: translateX(20px); }
+
     .profile-row:nth-child(1) { animation-delay: 0.25s; }
     .profile-row:nth-child(2) { animation-delay: 0.40s; }
     .profile-row:nth-child(3) { animation-delay: 0.55s; }
     .profile-row:nth-child(4) { animation-delay: 0.70s; border-bottom: none; }
     .profile-row.quote-row {
-      flex-direction: column; gap: 4px; border-bottom: none; animation-delay: 0.85s;
+      flex-direction: column; gap: 3px; border-bottom: none; animation-delay: 0.85s;
     }
 
-    /* 🌟 左側からフワッとスライドインしてくるプロフィールのkeyframes定義 */
     @keyframes profileAppear { 
-      0% { opacity: 0; transform: translateX(-25px); }
+      0% { opacity: 0; transform: translateX(var(--slide-from, -20px)); }
       100% { opacity: 1; transform: translateX(0); }
     }
+    .profile-bg-karin { --slide-from: 20px; }
+    .profile-bg-ukyo { --slide-from: -20px; }
 
-    .profile-label { font-size: 0.72rem; font-weight: 700; color: #d4af37; letter-spacing: 0.05em; font-family: var(--font-serif); }
-    .profile-val { font-size: 0.82rem; font-weight: 600; color: #ffffff; text-align: right; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
-    .profile-quote { font-size: 0.78rem; font-weight: 400; color: #f5f2eb; line-height: 1.45; font-style: italic; background: rgba(0, 0, 0, 0.4); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #d4af37; }
+    .profile-label { font-size: 0.7rem; font-weight: 700; color: #d4af37; letter-spacing: 0.05em; font-family: var(--font-serif); }
+    .profile-val { font-size: 0.8rem; font-weight: 600; color: #ffffff; text-align: right; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    .profile-bg-karin .profile-val { text-align: left; }
+    
+    .profile-quote { font-size: 0.75rem; font-weight: 400; color: #f5f2eb; line-height: 1.4; font-style: italic; background: rgba(0, 0, 0, 0.3); padding: 7px 9px; border-radius: 6px; border-left: 2px solid #d4af37; }
+    .profile-bg-karin .profile-quote { border-left: none; border-right: 2px solid #d4af37; text-align: right; }
 
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
     .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
@@ -486,7 +504,7 @@
       <button class="btn btn-primary" style="margin-top:14px;" onclick="navigate('select', true)">続けてアップロードする</button>
     </div>
 
-    <!-- 👨 新郎プロフィール画面 -->
+    <!-- 👨 新郎プロフィール画面（左側寄せ＆右側フォーカス） -->
     <div id="profile-ukyo-screen">
       <div class="title-area"><span class="en-sub">GROOM PROFILE</span><h2>新郎プロフィール</h2></div>
       <div class="profile-card-wrapper profile-bg-ukyo" id="ukyo-animation-box">
@@ -507,7 +525,7 @@
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 👩 新婦プロフィール画面 -->
+    <!-- 👩 新婦プロフィール画面（右側寄せ＆上方配置＆左側フォーカス） -->
     <div id="profile-karin-screen">
       <div class="title-area"><span class="en-sub">BRIDE PROFILE</span><h2>新婦プロフィール</h2></div>
       <div class="profile-card-wrapper profile-bg-karin" id="karin-animation-box">
