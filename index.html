@@ -207,7 +207,7 @@
     
     .sidebar-menu-list { display: flex; flex-direction: column; gap: 8px; }
     
-    /* 🌟 各メニュー項目のデザイン（英語表記・エレガントなフォント） */
+    /* 各メニュー項目のデザイン（英語表記・エレガントなフォント） */
     .sidebar-menu-item, .sidebar-sub-item {
       font-family: var(--font-en);
       letter-spacing: 0.05em;
@@ -217,13 +217,13 @@
       padding: 14px; border-radius: 12px; font-size: 1.05rem; font-weight: 600; color: #333; 
       display: flex; align-items: center; gap: 12px; cursor: pointer; 
       background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); 
-      /* ③ 左からのフェードイン・スライドインアニメーション初期状態 */
+      /* 左からのフェードイン・スライドインアニメーション初期状態 */
       opacity: 0; transform: translateX(-25px);
       transition: background 0.2s;
     }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
 
-    /* ③ サイドバー展開時に各メニューが左から順番にフワッとスライドインする演出 */
+    /* サイドバー展開時に各メニューが左から順番にスライドインする演出 */
     .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(1) {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.08s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.08s, background 0.2s;
     }
@@ -235,6 +235,11 @@
     }
     .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(5) {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.26s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.26s, background 0.2s;
+    }
+
+    /* 下部の「ヘルプ」ボタン（.sidebar-drawer直下）のフェードイン設定 */
+    .sidebar-overlay.active .sidebar-drawer > .sidebar-menu-item {
+      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.32s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.32s, background 0.2s;
     }
 
     /* 階層型アコーディオンメニュー用のスタイル */
@@ -250,7 +255,6 @@
     }
     .sidebar-sub-item:active { background: rgba(247, 238, 219, 0.8); }
 
-    /* サブメニューが開いたときのフェードイン演出 */
     .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(1) {
       opacity: 1; transform: translateX(0); transition-delay: 0.05s;
     }
@@ -258,7 +262,7 @@
       opacity: 1; transform: translateX(0); transition-delay: 0.10s;
     }
 
-    /* プロフィールカードのスタイル（①拡張子を .jpeg に修正済み） */
+    /* プロフィールカードのスタイル */
     .profile-card-wrapper {
       position: relative; width: 100%; border-radius: 16px; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.8);
@@ -360,7 +364,6 @@
         <div class="sidebar-menu-list">
           <div class="sidebar-menu-item" onclick="navigate('select')"><span class="material-symbols-rounded">home</span> Home</div>
           
-          <!-- 📂 階層型プロフィールメニュー（英語表記） -->
           <div class="sidebar-menu-item accordion-parent" onclick="this.classList.toggle('active')">
             <span class="material-symbols-rounded">person</span> Profile <span class="material-symbols-rounded" style="margin-left:auto; font-size:1rem;">expand_more</span>
           </div>
