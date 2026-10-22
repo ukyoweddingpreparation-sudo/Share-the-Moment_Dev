@@ -187,7 +187,7 @@
     .progress-info { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--primary-gold); }
     #status { font-size: 0.8rem; text-align: center; margin-top: 8px; font-weight: 700; }
     
-    #confirm-screen, #thankyou-screen, #history-screen, #howto-screen, #profile-ukyo-screen, #profile-karin-screen { display: none; }
+    #confirm-screen, #thankyou-screen, #history-screen, #howto-screen, #profile-ukyo-screen, #profile-karin-screen, #help-screen { display: none; }
 
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; }
@@ -256,21 +256,21 @@
       opacity: 1; transform: translateX(0); transition-delay: 0.10s;
     }
 
-    /* 🌟 プロフィールカードの共通スタイル（枠の存在感を軽減・写真主役） */
+    /* 🌟 プロフィールカード（枠の存在感を軽く・写真主役・左右配置分け） */
     .profile-card-wrapper {
       position: relative; width: 100%; height: 440px; border-radius: 18px; overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 0.5px solid rgba(212, 175, 55, 0.3);
       background-size: cover; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px 14px;
     }
     
-    /* 新郎：情報を左側寄せ ＆ 背景を右側にフォーカス */
+    /* 新郎：情報左側＆右側フォーカス */
     .profile-bg-ukyo { 
       background-image: linear-gradient(to right, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-ukyo.jpeg'); 
       background-position: 80% center;
       align-items: flex-start;
     }
     
-    /* 新婦：情報を右側寄せ ＆ 画像を上に上げて見切れ防止 ＆ 背景を左側にフォーカス */
+    /* 新婦：情報右側＆上方配置＆左側フォーカス */
     .profile-bg-karin { 
       background-image: linear-gradient(to left, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-karin.jpeg'); 
       background-position: center 15%; 
@@ -288,7 +288,6 @@
     }
     .profile-bg-karin .profile-name-title { text-align: right; transform: translateX(20px); }
 
-    /* 情報ボックスの存在感を軽く（透過度アップ＆枠線細め） */
     .profile-details-box {
       background: rgba(15, 15, 15, 0.35); backdrop-filter: blur(8px);
       border-radius: 12px; padding: 10px 12px; border: 0.5px solid rgba(212, 175, 55, 0.25);
@@ -400,7 +399,8 @@
         </div>
       </div>
 
-      <div class="sidebar-menu-item" onclick="location.href='help.html'">
+      <!-- 🌟 ヘルプも同一ファイル内遷移（フルスクリーン維持）に変更 -->
+      <div class="sidebar-menu-item" onclick="navigate('help')">
         <span class="material-symbols-rounded">help</span>
         <span>ヘルプ</span>
       </div>
@@ -623,6 +623,28 @@
 
       <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
+
+    <!-- ❓ ヘルプ画面（同一ファイル内に統合し、フルスクリーンを完全に維持） -->
+    <div id="help-screen">
+      <div class="title-area"><span class="en-sub">HELP</span><h2>ヘルプ・お問い合わせ</h2></div>
+      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">お困りの際はこちらをご確認ください。</p>
+      
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. 写真がアップロードできないときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          電波状況の安定した場所でお試しいただくか、選択する写真の枚数を少し減らして再度送信してみてください。
+        </div>
+      </div>
+
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. 音や演出が動かないときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          お使いのブラウザ（SafariやChromeなど）のタブを一度整理していただき、ページを再読み込みしてください。
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
+    </div>
   </div>
 
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
@@ -750,6 +772,7 @@
       document.getElementById('howto-screen').style.display = (screenName === 'howto') ? 'block' : 'none';
       document.getElementById('profile-ukyo-screen').style.display = (screenName === 'profile-ukyo') ? 'block' : 'none';
       document.getElementById('profile-karin-screen').style.display = (screenName === 'profile-karin') ? 'block' : 'none';
+      document.getElementById('help-screen').style.display = (screenName === 'help') ? 'block' : 'none';
       
       if (screenName === 'select') {
         triggerChatAnimation();
