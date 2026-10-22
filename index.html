@@ -46,6 +46,13 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
+    /* 🌟 白浮き防止のためhtmlにもベースカラーを指定 */
+    html {
+      background-color: #d5c5c8;
+      width: 100%;
+      height: 100%;
+    }
+
     body {
       font-family: var(--font-sans); min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; color: var(--text-main); position: relative; overflow-x: hidden;
       background: linear-gradient(-45deg, #e2d1c3, #d5c5c8, #b8c6db, #cbd5e1); background-size: 400% 400%; animation: gradientBG 18s ease infinite;
@@ -92,7 +99,8 @@
     }
     @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-    #bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
+    /* 🌟 100vw, 100dvhで画面全体を確実に覆うよう修正 */
+    #bg-slideshow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 0; overflow: hidden; pointer-events: none; }
     .bg-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.0s ease-in-out; filter: blur(2px); mix-blend-mode: soft-light; }
     .bg-slide.active { opacity: 0.6; }
 
@@ -256,31 +264,22 @@
       opacity: 1; transform: translateX(0); transition-delay: 0.10s;
     }
 
-    /* 🌟 プロフィールカード（枠の存在感を軽く・写真主役・左右配置分け） */
+    /* プロフィールカードスタイル */
     .profile-card-wrapper {
       position: relative; width: 100%; height: 440px; border-radius: 18px; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 0.5px solid rgba(212, 175, 55, 0.3);
       background-size: cover; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px 14px;
     }
-    
-    /* 新郎：情報左側＆右側フォーカス */
     .profile-bg-ukyo { 
       background-image: linear-gradient(to right, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-ukyo.jpeg'); 
-      background-position: 80% center;
-      align-items: flex-start;
+      background-position: 80% center; align-items: flex-start;
     }
-    
-    /* 新婦：情報右側＆上方配置＆左側フォーカス */
     .profile-bg-karin { 
       background-image: linear-gradient(to left, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-karin.jpeg'); 
-      background-position: center 15%; 
-      align-items: flex-end;
+      background-position: center 15%; align-items: flex-end;
     }
 
-    .profile-content-area {
-      display: flex; flex-direction: column; gap: 6px; width: 82%; z-index: 2;
-    }
-    
+    .profile-content-area { display: flex; flex-direction: column; gap: 6px; width: 82%; z-index: 2; }
     .profile-name-title {
       font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: #f3e5ab; letter-spacing: 0.15em;
       text-shadow: 0 2px 8px rgba(0,0,0,0.9); opacity: 0; transform: translateX(-20px);
@@ -293,7 +292,6 @@
       border-radius: 12px; padding: 10px 12px; border: 0.5px solid rgba(212, 175, 55, 0.25);
       display: flex; flex-direction: column; gap: 6px;
     }
-    
     .profile-row {
       display: flex; justify-content: space-between; align-items: baseline;
       border-bottom: 0.5px solid rgba(212, 175, 55, 0.15); padding-bottom: 4px;
@@ -301,14 +299,11 @@
       animation: profileAppear 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
     .profile-bg-karin .profile-row { transform: translateX(20px); }
-
     .profile-row:nth-child(1) { animation-delay: 0.25s; }
     .profile-row:nth-child(2) { animation-delay: 0.40s; }
     .profile-row:nth-child(3) { animation-delay: 0.55s; }
     .profile-row:nth-child(4) { animation-delay: 0.70s; border-bottom: none; }
-    .profile-row.quote-row {
-      flex-direction: column; gap: 3px; border-bottom: none; animation-delay: 0.85s;
-    }
+    .profile-row.quote-row { flex-direction: column; gap: 3px; border-bottom: none; animation-delay: 0.85s; }
 
     @keyframes profileAppear { 
       0% { opacity: 0; transform: translateX(var(--slide-from, -20px)); }
@@ -320,7 +315,6 @@
     .profile-label { font-size: 0.7rem; font-weight: 700; color: #d4af37; letter-spacing: 0.05em; font-family: var(--font-serif); }
     .profile-val { font-size: 0.8rem; font-weight: 600; color: #ffffff; text-align: right; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
     .profile-bg-karin .profile-val { text-align: left; }
-    
     .profile-quote { font-size: 0.75rem; font-weight: 400; color: #f5f2eb; line-height: 1.4; font-style: italic; background: rgba(0, 0, 0, 0.3); padding: 7px 9px; border-radius: 6px; border-left: 2px solid #d4af37; }
     .profile-bg-karin .profile-quote { border-left: none; border-right: 2px solid #d4af37; text-align: right; }
 
@@ -399,7 +393,6 @@
         </div>
       </div>
 
-      <!-- 🌟 ヘルプも同一ファイル内遷移（フルスクリーン維持）に変更 -->
       <div class="sidebar-menu-item" onclick="navigate('help')">
         <span class="material-symbols-rounded">help</span>
         <span>ヘルプ</span>
@@ -504,7 +497,7 @@
       <button class="btn btn-primary" style="margin-top:14px;" onclick="navigate('select', true)">続けてアップロードする</button>
     </div>
 
-    <!-- 👨 新郎プロフィール画面（左側寄せ＆右側フォーカス） -->
+    <!-- 👨 新郎プロフィール画面 -->
     <div id="profile-ukyo-screen">
       <div class="title-area"><span class="en-sub">GROOM PROFILE</span><h2>新郎プロフィール</h2></div>
       <div class="profile-card-wrapper profile-bg-ukyo" id="ukyo-animation-box">
@@ -525,7 +518,7 @@
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 👩 新婦プロフィール画面（右側寄せ＆上方配置＆左側フォーカス） -->
+    <!-- 👩 新婦プロフィール画面 -->
     <div id="profile-karin-screen">
       <div class="title-area"><span class="en-sub">BRIDE PROFILE</span><h2>新婦プロフィール</h2></div>
       <div class="profile-card-wrapper profile-bg-karin" id="karin-animation-box">
@@ -554,7 +547,7 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント（#howto-screen） -->
+    <!-- 💡 使い方のヒント -->
     <div id="howto-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
@@ -624,7 +617,7 @@
       <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- ❓ ヘルプ画面（同一ファイル内に統合し、フルスクリーンを完全に維持） -->
+    <!-- ❓ ヘルプ画面 -->
     <div id="help-screen">
       <div class="title-area"><span class="en-sub">HELP</span><h2>ヘルプ・お問い合わせ</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">お困りの際はこちらをご確認ください。</p>
@@ -704,7 +697,6 @@
       });
     }
 
-    /* 新郎新婦プロフィール画面の段階アニメーション発火用関数 */
     function triggerProfileAnimation(boxId) {
       const box = document.getElementById(boxId);
       if (!box) return;
@@ -1016,4 +1008,3 @@
   </script>
 </body>
 </html>
-
