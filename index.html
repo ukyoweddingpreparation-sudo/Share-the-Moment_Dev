@@ -198,6 +198,30 @@
     .btn-add { background: rgba(255, 255, 255, 0.7); color: var(--primary-gold); border: 1px solid var(--gold-border); margin-bottom: 10px; }
     .btn-secondary { background: rgba(255, 255, 255, 0.4); color: #475569; border: 1px solid rgba(255, 255, 255, 0.6); margin-top: 10px; }
 
+    /* 🌟 ヘルプ画面の送信ボタン専用スタイル（活性・非活性） */
+    #help-submit-btn {
+      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(184,151,83,0.3);
+      margin-top: 14px;
+      font-family: var(--font-sans) !important;
+      transition: all 0.3s ease;
+    }
+    #help-submit-btn .material-symbols-rounded {
+      color: #ffffff;
+      transition: color 0.3s ease;
+    }
+    #help-submit-btn:disabled {
+      background: rgba(226, 232, 240, 0.6) !important;
+      color: #94a3b8 !important;
+      box-shadow: none !important;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    #help-submit-btn:disabled .material-symbols-rounded {
+      color: #94a3b8 !important;
+    }
+
     .progress-container { display: none; margin: 14px 0 8px; }
     .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.6); border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
     .progress-bar-fill { height: 100%; width: 0%; background: var(--gold-accent); border-radius: 4px; transition: width 0.3s; }
@@ -250,11 +274,9 @@
     .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(5) {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.26s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.26s, background 0.2s;
     }
-    /* 🌟 How to use が正常に表示されるように追加 */
     .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(6) {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.32s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.32s, background 0.2s;
     }
-    /* お問い合わせボタン用 */
     .sidebar-overlay.active .sidebar-drawer > .sidebar-menu-item {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.38s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.38s, background 0.2s;
     }
@@ -726,9 +748,11 @@
         <textarea id="help-content" class="input-base text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。" style="height: 100px;"></textarea>
       </div>
 
-      <button class="btn" style="background: rgba(226, 232, 240, 0.8); color: #64748b; margin-top: 14px; font-family: var(--font-sans) !important;" onclick="submitHelp()">
-        <span class="material-symbols-rounded" style="color:var(--primary-gold); font-size: 1.1rem;">send</span> 送信する
+      <!-- 🌟 送信ボタン（初期状態は disabled） -->
+      <button id="help-submit-btn" class="btn" onclick="submitHelp()" disabled>
+        <span class="material-symbols-rounded" style="font-size: 1.1rem;">send</span> 送信する
       </button>
+      
       <button class="btn btn-secondary" style="margin-top: 10px;" onclick="navigate('select')">
         <span class="material-symbols-rounded">home</span>ホームに戻る
       </button>
@@ -782,6 +806,9 @@
     window.addEventListener('DOMContentLoaded', () => { 
       initWaveTitle();
       initBgSlideshow(); 
+      
+      // 🌟 お問い合わせ内容入力時のバリデーションイベントを追加
+      document.getElementById('help-content').addEventListener('input', checkHelpFormValidity);
 
       setTimeout(() => {
         const loader = document.getElementById('loading-screen');
@@ -794,6 +821,20 @@
         }
       }, 5000); 
     });
+
+    // 🌟 バリデーションチェック関数
+    function checkHelpFormValidity() {
+      const tableNo = document.getElementById('help-table-no').value;
+      const name = document.getElementById('help-name').value;
+      const content = document.getElementById('help-content').value.trim();
+      const submitBtn = document.getElementById('help-submit-btn');
+
+      if (tableNo && name && content) {
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.disabled = true;
+      }
+    }
 
     function initWaveTitle() {
       const container = document.getElementById('wave-title');
@@ -883,6 +924,8 @@
             nameTrigger.style.background = 'rgba(255, 255, 255, 0.65)';
             nameTrigger.style.color = 'var(--text-main)';
           }
+          
+          if (isHelpTableSelect) checkHelpFormValidity();
 
           setTimeout(() => document.getElementById('table-modal').classList.remove('active'), 200);
         };
@@ -911,6 +954,9 @@
           document.getElementById('help-name').value = nameVal;
           document.getElementById('help-name-trigger-text').innerText = `✓ ${nameVal}`;
           document.getElementById('help-name-trigger').classList.add('selected');
+          
+          checkHelpFormValidity();
+
           setTimeout(() => document.getElementById('name-modal').classList.remove('active'), 200);
         };
         container.appendChild(item);
@@ -1209,10 +1255,27 @@
       const content = document.getElementById('help-content').value.trim();
 
       if (!tableNo || !name || !content) {
-        alert('必須項目をすべてご入力ください。');
-        return;
+        return; // バリデーションでブロックされるため本来ここには来ない
       }
+      
       alert('お問い合わせを受け付けました。');
+      
+      // 送信後のフォーム初期化処理
+      document.getElementById('help-table-no').value = '';
+      document.getElementById('help-table-trigger-text').innerText = 'SELECT TABLE';
+      document.getElementById('help-table-trigger').classList.remove('selected');
+      
+      document.getElementById('help-name').value = '';
+      document.getElementById('help-name-trigger-text').innerText = '先にテーブルを選択してください';
+      document.getElementById('help-name-trigger').classList.remove('selected');
+      document.getElementById('help-name-trigger').style.background = 'rgba(226, 232, 240, 0.6)';
+      document.getElementById('help-name-trigger').style.color = '#94a3b8';
+      
+      document.getElementById('help-content').value = '';
+      
+      // ボタンを再度非活性にする
+      checkHelpFormValidity();
+      
       navigate('select');
     }
   </script>
