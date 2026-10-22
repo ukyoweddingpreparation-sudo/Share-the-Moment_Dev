@@ -46,6 +46,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
+    html {
+      background-color: #d5c5c8;
+      width: 100%;
+      height: 100%;
+    }
+
     body {
       font-family: var(--font-sans); min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; color: var(--text-main); position: relative; overflow-x: hidden;
       background: linear-gradient(-45deg, #e2d1c3, #d5c5c8, #b8c6db, #cbd5e1); background-size: 400% 400%; animation: gradientBG 18s ease infinite;
@@ -92,7 +98,7 @@
     }
     @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-    #bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
+    #bg-slideshow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 0; overflow: hidden; pointer-events: none; }
     .bg-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 2.0s ease-in-out; filter: blur(2px); mix-blend-mode: soft-light; }
     .bg-slide.active { opacity: 0.6; }
 
@@ -187,7 +193,7 @@
     .progress-info { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--primary-gold); }
     #status { font-size: 0.8rem; text-align: center; margin-top: 8px; font-weight: 700; }
     
-    #confirm-screen, #thankyou-screen, #history-screen, #howto-screen, #profile-ukyo-screen, #profile-karin-screen, #help-screen { display: none; }
+    #confirm-screen, #thankyou-screen, #history-screen, #howto-screen, #profile-ukyo-screen, #profile-karin-screen, #help-screen, #info-screen { display: none; }
 
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; }
@@ -256,31 +262,22 @@
       opacity: 1; transform: translateX(0); transition-delay: 0.10s;
     }
 
-    /* 🌟 プロフィールカード（枠の存在感を軽く・写真主役・左右配置分け） */
+    /* プロフィールカードスタイル */
     .profile-card-wrapper {
       position: relative; width: 100%; height: 440px; border-radius: 18px; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 0.5px solid rgba(212, 175, 55, 0.3);
       background-size: cover; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px 14px;
     }
-    
-    /* 新郎：情報左側＆右側フォーカス */
     .profile-bg-ukyo { 
       background-image: linear-gradient(to right, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-ukyo.jpeg'); 
-      background-position: 80% center;
-      align-items: flex-start;
+      background-position: 80% center; align-items: flex-start;
     }
-    
-    /* 新婦：情報右側＆上方配置＆左側フォーカス */
     .profile-bg-karin { 
       background-image: linear-gradient(to left, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.15) 100%), url('./profile-karin.jpeg'); 
-      background-position: center 15%; 
-      align-items: flex-end;
+      background-position: center 15%; align-items: flex-end;
     }
 
-    .profile-content-area {
-      display: flex; flex-direction: column; gap: 6px; width: 82%; z-index: 2;
-    }
-    
+    .profile-content-area { display: flex; flex-direction: column; gap: 6px; width: 82%; z-index: 2; }
     .profile-name-title {
       font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: #f3e5ab; letter-spacing: 0.15em;
       text-shadow: 0 2px 8px rgba(0,0,0,0.9); opacity: 0; transform: translateX(-20px);
@@ -293,7 +290,6 @@
       border-radius: 12px; padding: 10px 12px; border: 0.5px solid rgba(212, 175, 55, 0.25);
       display: flex; flex-direction: column; gap: 6px;
     }
-    
     .profile-row {
       display: flex; justify-content: space-between; align-items: baseline;
       border-bottom: 0.5px solid rgba(212, 175, 55, 0.15); padding-bottom: 4px;
@@ -301,14 +297,11 @@
       animation: profileAppear 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
     .profile-bg-karin .profile-row { transform: translateX(20px); }
-
     .profile-row:nth-child(1) { animation-delay: 0.25s; }
     .profile-row:nth-child(2) { animation-delay: 0.40s; }
     .profile-row:nth-child(3) { animation-delay: 0.55s; }
     .profile-row:nth-child(4) { animation-delay: 0.70s; border-bottom: none; }
-    .profile-row.quote-row {
-      flex-direction: column; gap: 3px; border-bottom: none; animation-delay: 0.85s;
-    }
+    .profile-row.quote-row { flex-direction: column; gap: 3px; border-bottom: none; animation-delay: 0.85s; }
 
     @keyframes profileAppear { 
       0% { opacity: 0; transform: translateX(var(--slide-from, -20px)); }
@@ -320,9 +313,25 @@
     .profile-label { font-size: 0.7rem; font-weight: 700; color: #d4af37; letter-spacing: 0.05em; font-family: var(--font-serif); }
     .profile-val { font-size: 0.8rem; font-weight: 600; color: #ffffff; text-align: right; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
     .profile-bg-karin .profile-val { text-align: left; }
-    
     .profile-quote { font-size: 0.75rem; font-weight: 400; color: #f5f2eb; line-height: 1.4; font-style: italic; background: rgba(0, 0, 0, 0.3); padding: 7px 9px; border-radius: 6px; border-left: 2px solid #d4af37; }
     .profile-bg-karin .profile-quote { border-left: none; border-right: 2px solid #d4af37; text-align: right; }
+
+    /* 🌟 Information（全体共有）画面のスタイル */
+    .info-card {
+      background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 16px; padding: 12px; margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .info-img-wrapper { width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(212, 175, 55, 0.3); }
+    .info-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .info-title { font-family: var(--font-serif); font-size: 0.9rem; font-weight: 700; color: var(--text-main); }
+    .info-desc { font-size: 0.78rem; color: var(--text-sub); line-height: 1.4; }
+    .btn-download {
+      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%); color: white;
+      padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; border: none; cursor: pointer;
+      display: flex; justify-content: center; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(184,151,83,0.3);
+    }
+    .btn-download:active { transform: scale(0.97); }
 
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
     .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
@@ -394,12 +403,12 @@
             <div class="sidebar-sub-item" onclick="navigate('profile-karin')"><span class="material-symbols-rounded" style="font-size:0.9rem;">female</span> Karin Profile</div>
           </div>
 
+          <div class="sidebar-menu-item" onclick="navigate('info')"><span class="material-symbols-rounded">photo_library</span> Information</div>
           <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> History</div>
           <div class="sidebar-menu-item" onclick="navigate('howto')"><span class="material-symbols-rounded">lightbulb</span> How to use</div>
         </div>
       </div>
 
-      <!-- 🌟 ヘルプも同一ファイル内遷移（フルスクリーン維持）に変更 -->
       <div class="sidebar-menu-item" onclick="navigate('help')">
         <span class="material-symbols-rounded">help</span>
         <span>ヘルプ</span>
@@ -445,7 +454,7 @@
       <div class="input-group">
         <label>テーブル番号を選択してください</label>
         <span class="label-sub">※QRコードが記載されているPOPをご確認ください</span>
-        <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
+        <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal('table-no', 'table-trigger-text', 'table-trigger', false)">
           <span id="table-trigger-text">SELECT TABLE</span>
           <span class="material-symbols-rounded" style="font-size:1.2rem; color:#94a3b8;">expand_more</span>
         </div>
@@ -504,7 +513,7 @@
       <button class="btn btn-primary" style="margin-top:14px;" onclick="navigate('select', true)">続けてアップロードする</button>
     </div>
 
-    <!-- 👨 新郎プロフィール画面（左側寄せ＆右側フォーカス） -->
+    <!-- 👨 新郎プロフィール画面 -->
     <div id="profile-ukyo-screen">
       <div class="title-area"><span class="en-sub">GROOM PROFILE</span><h2>新郎プロフィール</h2></div>
       <div class="profile-card-wrapper profile-bg-ukyo" id="ukyo-animation-box">
@@ -525,7 +534,7 @@
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 👩 新婦プロフィール画面（右側寄せ＆上方配置＆左側フォーカス） -->
+    <!-- 👩 新婦プロフィール画面 -->
     <div id="profile-karin-screen">
       <div class="title-area"><span class="en-sub">BRIDE PROFILE</span><h2>新婦プロフィール</h2></div>
       <div class="profile-card-wrapper profile-bg-karin" id="karin-animation-box">
@@ -546,6 +555,40 @@
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
+    <!-- 🌟 全体共有・思い出ダウンロード画面 (#info-screen) -->
+    <div id="info-screen">
+      <div class="title-area"><span class="en-sub">INFORMATION</span><h2>全体共有・お知らせ</h2></div>
+      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">新郎新婦からのシェア写真です✨ボタンから保存できます。</p>
+      
+      <div id="info-list-container">
+        <!-- サンプル1：集合写真 -->
+        <div class="info-card">
+          <div class="info-img-wrapper">
+            <img src="https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000" alt="集合写真">
+          </div>
+          <div class="info-title">📸 記念集合写真</div>
+          <div class="info-desc">挙式・披露宴の折に撮影した記念の全体集合写真です。思い出にぜひ保存してください！</div>
+          <button class="btn-download" onclick="downloadOrShareImage('https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000', 'wedding_group_photo.jpg')">
+            <span class="material-symbols-rounded" style="color:white; font-size:1.1rem;">download</span> 写真を保存する
+          </button>
+        </div>
+
+        <!-- サンプル2：当日のご案内・サプライズ用など -->
+        <div class="info-card">
+          <div class="info-img-wrapper">
+            <img src="https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000" alt="会場ショット">
+          </div>
+          <div class="info-title">✨ 会場スナップ</div>
+          <div class="info-desc">本日の会場の雰囲気をお裾分けいたします。</div>
+          <button class="btn-download" onclick="downloadOrShareImage('https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000', 'wedding_venue_snapshot.jpg')">
+            <span class="material-symbols-rounded" style="color:white; font-size:1.1rem;">download</span> 写真を保存する
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
+    </div>
+
     <!-- 📜 履歴画面 -->
     <div id="history-screen">
       <div class="title-area"><span class="en-sub">HISTORY</span><h2>送信履歴</h2></div>
@@ -554,7 +597,7 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント（#howto-screen） -->
+    <!-- 💡 使い方のヒント -->
     <div id="howto-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
@@ -624,33 +667,56 @@
       <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- ❓ ヘルプ画面（同一ファイル内に統合し、フルスクリーンを完全に維持） -->
+    <!-- ❓ ヘルプ・お問い合わせ画面（名前ドロップダウン連動版） -->
     <div id="help-screen">
-      <div class="title-area"><span class="en-sub">HELP</span><h2>ヘルプ・お問い合わせ</h2></div>
-      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">お困りの際はこちらをご確認ください。</p>
+      <div class="title-area"><span class="en-sub">HELP & SUPPORT</span><h2>お問い合わせ[cite: 3]</h2></div>
+      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">アプリの操作でお困りの際はこちらからご連絡ください。[cite: 3]</p>
       
-      <div class="help-item" onclick="this.classList.toggle('active')">
-        <div class="help-question">Q. 写真がアップロードできないときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
-        <div class="help-answer">
-          電波状況の安定した場所でお試しいただくか、選択する写真の枚数を少し減らして再度送信してみてください。
+      <div class="input-group">
+        <label style="display: flex; align-items: center;">テーブル番号 <span class="required-badge">必須</span>[cite: 3]</label>
+        <div id="help-table-trigger" class="table-trigger-btn" onclick="openTableModal('help-table-no', 'help-table-trigger-text', 'help-table-trigger', true)">
+          <span id="help-table-trigger-text">SELECT TABLE</span>
+          <span class="material-symbols-rounded" style="font-size:1.2rem; color:#94a3b8;">expand_more</span>
         </div>
+        <input type="hidden" id="help-table-no" value="">
       </div>
 
-      <div class="help-item" onclick="this.classList.toggle('active')">
-        <div class="help-question">Q. 音や演出が動かないときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
-        <div class="help-answer">
-          お使いのブラウザ（SafariやChromeなど）のタブを一度整理していただき、ページを再読み込みしてください。
+      <div class="input-group">
+        <label style="display: flex; align-items: center;">お名前 <span class="required-badge">必須</span>[cite: 3]</label>
+        <div id="help-name-trigger" class="table-trigger-btn" style="background: rgba(226, 232, 240, 0.6); color: #94a3b8;" onclick="openNameModal()">
+          <span id="help-name-trigger-text">先にテーブルを選択してください</span>
+          <span class="material-symbols-rounded" style="font-size:1.2rem; color:#94a3b8;">expand_more</span>
         </div>
+        <input type="hidden" id="help-name" value="">
       </div>
 
-      <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
+      <div class="input-group">
+        <label style="display: flex; align-items: center;">問い合わせ内容 <span class="required-badge">必須</span>[cite: 3]</label>
+        <textarea id="help-content" class="text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。[cite: 3]" style="height: 100px;"></textarea>
+      </div>
+
+      <button class="btn" style="background: rgba(226, 232, 240, 0.8); color: #64748b; margin-top: 14px; font-family: var(--font-serif);" onclick="submitHelp()">
+        <span class="material-symbols-rounded" style="color:var(--primary-gold); font-size: 1.1rem;">send</span> 送信する[cite: 3]
+      </button>
+      <button class="btn btn-secondary" style="margin-top: 10px;" onclick="navigate('select')">
+        <span class="material-symbols-rounded">home</span>ホームに戻る[cite: 3]
+      </button>
     </div>
   </div>
 
+  <!-- テーブル選択用モーダル -->
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
     <div class="modal-content">
       <div class="table-modal-header">SELECT TABLE</div>
       <div class="table-list-container" id="table-list-container"></div>
+    </div>
+  </div>
+
+  <!-- 名前選択用モーダル -->
+  <div id="name-modal" class="modal-overlay" onclick="closeNameModalOnOutside(event)">
+    <div class="modal-content">
+      <div class="table-modal-header">SELECT NAME</div>
+      <div class="table-list-container" id="name-list-container"></div>
     </div>
   </div>
 
@@ -659,10 +725,33 @@
     const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q'];
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec";
 
+    // 🌟 テーブルごとのゲストデータ（適当な初期値）
+    const guestData = {
+      'Table A': ['山田 太郎', '山田 花子', '佐藤 一郎'],
+      'Table B': ['鈴木 健太', '高橋 愛'],
+      'Table C': ['伊藤 誠', '渡辺 結衣'],
+      'Table D': ['ゲストD1', 'ゲストD2'],
+      'Table E': ['ゲストE1', 'ゲストE2'],
+      'Table F': ['ゲストF1'],
+      'Table G': ['ゲストG1'],
+      'Table H': ['ゲストH1'],
+      'Table I': ['ゲストI1'],
+      'Table J': ['ゲストJ1'],
+      'Table K': ['ゲストK1'],
+      'Table L': ['ゲストL1'],
+      'Table M': ['ゲストM1'],
+      'Table N': ['ゲストN1'],
+      'Table O': ['ゲストO1'],
+      'Table P': ['ゲストP1'],
+      'Table Q': ['ゲストQ1']
+    };
+
+    let activeTableTarget = { input: 'table-no', text: 'table-trigger-text', btn: 'table-trigger' };
+    let isHelpTableSelect = false;
+
     window.addEventListener('DOMContentLoaded', () => { 
       initWaveTitle();
       initBgSlideshow(); 
-      initTableList(); 
 
       setTimeout(() => {
         const loader = document.getElementById('loading-screen');
@@ -704,7 +793,6 @@
       });
     }
 
-    /* 新郎新婦プロフィール画面の段階アニメーション発火用関数 */
     function triggerProfileAnimation(boxId) {
       const box = document.getElementById(boxId);
       if (!box) return;
@@ -735,22 +823,67 @@
       }
     }
 
-    function initTableList() {
+    function renderTableList() {
       const container = document.getElementById('table-list-container');
       container.innerHTML = '';
+      const currentSelected = document.getElementById(activeTableTarget.input).value;
+
       tables.forEach(tableVal => {
         const item = document.createElement('div');
         item.className = 'table-list-item';
-        item.innerHTML = `<span class="material-symbols-rounded check-mark" style="visibility:hidden; color:white; font-size:1.1rem;">check</span><span>${tableVal}</span>`;
-        item.onclick = () => {
-          document.getElementById('table-no').value = tableVal;
-          document.getElementById('table-trigger-text').innerText = `✓ ${tableVal}`;
-          document.getElementById('table-trigger').classList.add('selected');
-          document.getElementById('select-status').innerText = '';
-          document.querySelectorAll('.table-list-item').forEach(i => { i.classList.remove('selected'); i.querySelector('.check-mark').style.visibility = 'hidden'; });
+        if (tableVal === currentSelected) {
           item.classList.add('selected');
-          item.querySelector('.check-mark').style.visibility = 'visible';
+        }
+        item.innerHTML = `<span class="material-symbols-rounded check-mark" style="${tableVal === currentSelected ? 'visibility:visible;' : 'visibility:hidden;'} color:white; font-size:1.1rem;">check</span><span>${tableVal}</span>`;
+        
+        item.onclick = () => {
+          document.getElementById(activeTableTarget.input).value = tableVal;
+          document.getElementById(activeTableTarget.text).innerText = `✓ ${tableVal}`;
+          document.getElementById(activeTableTarget.btn).classList.add('selected');
+          
+          if(activeTableTarget.input === 'table-no') {
+            document.getElementById('select-status').innerText = '';
+          }
+          
+          // ヘルプ画面でテーブルが変更された場合、名前ドロップダウンをリセットして有効化する
+          if (isHelpTableSelect && currentSelected !== tableVal) {
+            const nameTrigger = document.getElementById('help-name-trigger');
+            document.getElementById('help-name').value = '';
+            document.getElementById('help-name-trigger-text').innerText = 'SELECT NAME';
+            nameTrigger.classList.remove('selected');
+            nameTrigger.style.background = 'rgba(255, 255, 255, 0.65)';
+            nameTrigger.style.color = 'var(--text-main)';
+          }
+
           setTimeout(() => document.getElementById('table-modal').classList.remove('active'), 200);
+        };
+        container.appendChild(item);
+      });
+    }
+
+    // 名前リスト表示関数
+    function renderNameList(tableNo) {
+      const container = document.getElementById('name-list-container');
+      container.innerHTML = '';
+      const currentSelected = document.getElementById('help-name').value;
+      const guests = guestData[tableNo] || [];
+
+      if (guests.length === 0) {
+         container.innerHTML = '<div style="padding: 12px; color: #fff; text-align: center; font-size: 0.9rem;">ゲスト情報がありません</div>';
+         return;
+      }
+
+      guests.forEach(nameVal => {
+        const item = document.createElement('div');
+        item.className = 'table-list-item';
+        if (nameVal === currentSelected) item.classList.add('selected');
+        item.innerHTML = `<span class="material-symbols-rounded check-mark" style="${nameVal === currentSelected ? 'visibility:visible;' : 'visibility:hidden;'} color:white; font-size:1.1rem;">check</span><span>${nameVal}</span>`;
+        
+        item.onclick = () => {
+          document.getElementById('help-name').value = nameVal;
+          document.getElementById('help-name-trigger-text').innerText = `✓ ${nameVal}`;
+          document.getElementById('help-name-trigger').classList.add('selected');
+          setTimeout(() => document.getElementById('name-modal').classList.remove('active'), 200);
         };
         container.appendChild(item);
       });
@@ -759,8 +892,41 @@
     function openSidebar() { document.getElementById('sidebar-overlay').classList.add('active'); }
     function closeSidebar() { document.getElementById('sidebar-overlay').classList.remove('active'); }
     function closeSidebarOnOutside(e) { if (e.target.id === 'sidebar-overlay') closeSidebar(); }
-    function openTableModal() { document.getElementById('table-modal').classList.add('active'); }
+    
+    function openTableModal(inputId, textId, btnId, isHelp) { 
+      activeTableTarget = { input: inputId, text: textId, btn: btnId };
+      isHelpTableSelect = isHelp;
+      renderTableList();
+      document.getElementById('table-modal').classList.add('active'); 
+    }
     function closeTableModalOnOutside(e) { if (e.target.id === 'table-modal') document.getElementById('table-modal').classList.remove('active'); }
+
+    function openNameModal() {
+      const selectedTable = document.getElementById('help-table-no').value;
+      if (!selectedTable) {
+        alert('先にテーブル番号を選択してください。');
+        return;
+      }
+      renderNameList(selectedTable);
+      document.getElementById('name-modal').classList.add('active');
+    }
+    function closeNameModalOnOutside(e) { if (e.target.id === 'name-modal') document.getElementById('name-modal').classList.remove('active'); }
+
+    async function downloadOrShareImage(imgUrl, fileName) {
+      try {
+        if (navigator.canShare || navigator.share) {
+          const response = await fetch(imgUrl);
+          const blob = await response.blob();
+          const file = new File([blob], fileName, { type: blob.type || 'image/jpeg' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: '記念写真', text: 'SharetheMomentsからのシェア画像です✨' });
+            return;
+          }
+        }
+        const a = document.createElement('a'); a.href = imgUrl; a.target = '_blank'; a.download = fileName;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      } catch (err) { console.log('Share error:', err); }
+    }
 
     function navigate(screenName, isReset = false) {
       closeSidebar();
@@ -773,16 +939,11 @@
       document.getElementById('profile-ukyo-screen').style.display = (screenName === 'profile-ukyo') ? 'block' : 'none';
       document.getElementById('profile-karin-screen').style.display = (screenName === 'profile-karin') ? 'block' : 'none';
       document.getElementById('help-screen').style.display = (screenName === 'help') ? 'block' : 'none';
+      document.getElementById('info-screen').style.display = (screenName === 'info') ? 'block' : 'none';
       
-      if (screenName === 'select') {
-        triggerChatAnimation();
-      }
-      if (screenName === 'profile-ukyo') {
-        triggerProfileAnimation('ukyo-animation-box');
-      }
-      if (screenName === 'profile-karin') {
-        triggerProfileAnimation('karin-animation-box');
-      }
+      if (screenName === 'select') { triggerChatAnimation(); }
+      if (screenName === 'profile-ukyo') { triggerProfileAnimation('ukyo-animation-box'); }
+      if (screenName === 'profile-karin') { triggerProfileAnimation('karin-animation-box'); }
       if (screenName === 'history') renderHistoryList();
       window.scrollTo(0, 0);
     }
@@ -795,7 +956,7 @@
         const msg = document.getElementById('select-status');
         msg.innerHTML = '<span class="material-symbols-rounded" style="font-size:1rem; vertical-align:middle;">warning</span> テーブル番号を選択してください';
         msg.style.color = '#c53030';
-        openTableModal();
+        openTableModal('table-no', 'table-trigger-text', 'table-trigger', false);
         return;
       }
       fileInput.click();
@@ -1012,6 +1173,19 @@
         st.style.color = '#c53030';
         document.getElementById('upload-btn').style.display = 'flex'; document.getElementById('add-btn').style.display = 'flex'; document.getElementById('reset-btn').style.display = 'flex';
       }
+    }
+
+    function submitHelp() {
+      const tableNo = document.getElementById('help-table-no').value;
+      const name = document.getElementById('help-name').value;
+      const content = document.getElementById('help-content').value.trim();
+
+      if (!tableNo || !name || !content) {
+        alert('必須項目をすべてご入力ください。');
+        return;
+      }
+      alert('お問い合わせを受け付けました。');
+      navigate('select');
     }
   </script>
 </body>
