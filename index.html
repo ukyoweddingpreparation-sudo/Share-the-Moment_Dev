@@ -162,16 +162,25 @@
 
     .required-badge { background: #e11d48; color: white; padding: 3px 7px; border-radius: 6px; font-size: 0.65rem; margin-left: 8px; font-weight: 700; display: inline-block; letter-spacing: 0.05em; }
 
-    /* 🌟 ゴシック体を強制指定して明朝体化を防ぐ */
-    .table-trigger-btn, .text-input-field {
-      width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.65); color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
-      font-family: var(--font-sans) !important;
+    /* 入力フィールドの共通ベーススタイル */
+    .input-base {
+      width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; 
+      font-size: 0.9rem; background: rgba(255, 255, 255, 0.65); color: var(--text-main); 
+      outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
     }
-    .table-trigger-btn { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
+
+    /* 🌟 テーブルや名前を選択するトリガー（ボタン）は画像を再現した明朝体（英字＋日本語） */
+    .table-trigger-btn {
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;
+      font-family: var(--font-en), var(--font-serif) !important; letter-spacing: 0.05em;
+    }
     .table-trigger-btn.selected { border-color: var(--primary-gold); color: var(--primary-gold); }
+    
+    /* テキスト入力欄はゴシック体を維持 */
+    .text-input-field { font-family: var(--font-sans) !important; }
     .text-input-field:focus { border-color: var(--primary-gold); background: rgba(255, 255, 255, 0.85); }
     .text-input-field::placeholder { color: #94a3b8; }
-    textarea.text-input-field { resize: none; height: 70px; font-family: var(--font-sans) !important; }
+    textarea.text-input-field { resize: none; height: 70px; }
 
     .file-select-area { border: 1.5px dashed var(--gold-border); border-radius: 14px; padding: 15px; text-align: center; background: rgba(255, 255, 255, 0.5); cursor: pointer; margin: 10px 0; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .file-select-area:active { transform: scale(0.98); background: rgba(255, 255, 255, 0.8); }
@@ -241,8 +250,13 @@
     .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(5) {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.26s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.26s, background 0.2s;
     }
-    .sidebar-overlay.active .sidebar-drawer > .sidebar-menu-item {
+    /* 🌟 How to use が正常に表示されるように追加 */
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(6) {
       opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.32s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.32s, background 0.2s;
+    }
+    /* お問い合わせボタン用 */
+    .sidebar-overlay.active .sidebar-drawer > .sidebar-menu-item {
+      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.38s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.38s, background 0.2s;
     }
 
     .submenu-container { display: flex; flex-direction: column; gap: 4px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding-left: 12px; }
@@ -364,8 +378,12 @@
     .table-list-container::-webkit-scrollbar { width: 4px; }
     .table-list-container::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 4px; }
     
-    /* 🌟 リストもゴシック体(sans-serif)にしてフォールバックを防ぐ */
-    .table-list-item { padding: 12px 16px; border-radius: 10px; font-family: var(--font-sans) !important; font-size: 0.92rem; color: rgba(255, 255, 255, 0.9); display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 2px; letter-spacing: 0.08em; }
+    /* 🌟 リストのフォントを画像を再現した明朝体（英字＋日本語）に変更 */
+    .table-list-item { 
+      padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); 
+      display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 2px; letter-spacing: 0.08em;
+      font-family: var(--font-en), var(--font-serif) !important; 
+    }
     .table-list-item.selected { background: linear-gradient(135deg, rgba(212, 175, 55, 0.85) 0%, rgba(170, 124, 17, 0.85) 100%); color: #ffffff; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.3); }
   </style>
 </head>
@@ -409,6 +427,8 @@
 
           <div class="sidebar-menu-item" onclick="navigate('info')"><span class="material-symbols-rounded">photo_library</span> Information</div>
           <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> History</div>
+          
+          <!-- 🌟 メニュー内のHow to use -->
           <div class="sidebar-menu-item" onclick="navigate('howto')"><span class="material-symbols-rounded">lightbulb</span> How to use</div>
         </div>
       </div>
@@ -458,7 +478,7 @@
       <div class="input-group">
         <label>テーブル番号を選択してください</label>
         <span class="label-sub">※QRコードが記載されているPOPをご確認ください</span>
-        <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal('table-no', 'table-trigger-text', 'table-trigger', false)">
+        <div id="table-trigger" class="input-base table-trigger-btn" onclick="openTableModal('table-no', 'table-trigger-text', 'table-trigger', false)">
           <span id="table-trigger-text">SELECT TABLE</span>
           <span class="material-symbols-rounded" style="font-size:1.2rem; color:#94a3b8;">expand_more</span>
         </div>
@@ -467,7 +487,7 @@
 
       <div class="input-group">
         <label for="user-name">お名前・ニックネーム（任意）</label>
-        <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
+        <input type="text" id="user-name" class="input-base text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
       </div>
 
       <div class="file-select-area" onclick="handleFileSelectClick()">
@@ -486,14 +506,14 @@
 
       <div class="input-group" style="margin-top: 18px; margin-bottom: 0;">
         <label for="user-message">お祝いメッセージ（任意）</label>
-        <textarea id="user-message" class="text-input-field" placeholder="新郎新婦へのメッセージがあればご記入ください" maxlength="100"></textarea>
+        <textarea id="user-message" class="input-base text-input-field" placeholder="新郎新婦へのメッセージがあればご記入ください" maxlength="100"></textarea>
       </div>
 
       <div class="input-group" id="confirm-name-group" style="display: none; margin-top: 14px; margin-bottom: 18px;">
         <label for="confirm-user-name" style="display: flex; align-items: center;">
           お名前・ニックネーム <span class="required-badge">必須</span>
         </label>
-        <input type="text" id="confirm-user-name" class="text-input-field" placeholder="メッセージ送信のためお名前をご記入ください" maxlength="20">
+        <input type="text" id="confirm-user-name" class="input-base text-input-field" placeholder="メッセージ送信のためお名前をご記入ください" maxlength="20">
       </div>
       
       <div style="margin-top: 18px;">
@@ -685,7 +705,7 @@
       
       <div class="input-group">
         <label style="display: flex; align-items: center;">テーブル番号 <span class="required-badge">必須</span></label>
-        <div id="help-table-trigger" class="table-trigger-btn" onclick="openTableModal('help-table-no', 'help-table-trigger-text', 'help-table-trigger', true)">
+        <div id="help-table-trigger" class="input-base table-trigger-btn" onclick="openTableModal('help-table-no', 'help-table-trigger-text', 'help-table-trigger', true)">
           <span id="help-table-trigger-text">SELECT TABLE</span>
           <span class="material-symbols-rounded" style="font-size:1.2rem; color:#94a3b8;">expand_more</span>
         </div>
@@ -694,7 +714,7 @@
 
       <div class="input-group">
         <label style="display: flex; align-items: center;">お名前 <span class="required-badge">必須</span></label>
-        <div id="help-name-trigger" class="table-trigger-btn" style="background: rgba(226, 232, 240, 0.6); color: #94a3b8;" onclick="openNameModal()">
+        <div id="help-name-trigger" class="input-base table-trigger-btn" style="background: rgba(226, 232, 240, 0.6); color: #94a3b8;" onclick="openNameModal()">
           <span id="help-name-trigger-text">先にテーブルを選択してください</span>
           <span class="material-symbols-rounded" style="font-size:1.2rem; color:#94a3b8;">expand_more</span>
         </div>
@@ -703,7 +723,7 @@
 
       <div class="input-group">
         <label style="display: flex; align-items: center;">問い合わせ内容 <span class="required-badge">必須</span></label>
-        <textarea id="help-content" class="text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。" style="height: 100px;"></textarea>
+        <textarea id="help-content" class="input-base text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。" style="height: 100px;"></textarea>
       </div>
 
       <button class="btn" style="background: rgba(226, 232, 240, 0.8); color: #64748b; margin-top: 14px; font-family: var(--font-sans) !important;" onclick="submitHelp()">
@@ -1198,6 +1218,3 @@
   </script>
 </body>
 </html>
-
-
-
