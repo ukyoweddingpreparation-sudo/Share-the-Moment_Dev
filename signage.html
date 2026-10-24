@@ -1,523 +1,436 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>L'Eternel Moment - Wedding Signage</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Shippori+Mincho:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: #0c0b0a;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Shippori Mincho', serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Eternel Moment - Wedding Photo Signage</title>
 
-        /* 🚪 起動時ラグジュアリー・スプラッシュ画面（元のダークトーンUIに復元） */
-        #loadingScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(12, 11, 10, 0.5), rgba(12, 11, 10, 0.8)), 
-                        url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        #loadingScreen.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Shippori+Mincho:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
-        #loadingScreen::after {
-            content: '';
-            position: absolute;
-            top: 24px; left: 24px; right: 24px; bottom: 24px;
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            pointer-events: none;
-        }
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-        .splash-subtitle {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            letter-spacing: 0.45em;
-            color: #d4af37;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            font-weight: 400;
-            opacity: 0.9;
-        }
+  <style>
+    :root {
+      --font-title: 'Cinzel', serif;
+      --font-en: 'Cormorant Garamond', serif;
+      --font-jp: 'Shippori Mincho', serif;
+      --primary-gold: #d4af37;
+    }
 
-        .splash-title {
-            font-family: 'Shippori Mincho', serif;
-            font-size: 3.4rem;
-            letter-spacing: 0.15em;
-            color: #ffffff;
-            margin-bottom: 20px;
-            font-weight: 400;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body, html {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background-color: #0c0b0a; font-family: var(--font-jp);
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
 
-        .splash-title span {
-            display: inline-block;
-            animation: waveAnimation 3.5s ease-in-out infinite;
-            animation-delay: calc(var(--i) * 0.1s);
-        }
+    /* 🚪 起動時ラグジュアリー・スプラッシュ画面 */
+    #loadingScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(12, 11, 10, 0.5), rgba(12, 11, 10, 0.8)), 
+                  url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
+      z-index: 1000; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    #loadingScreen.fade-out { opacity: 0; pointer-events: none; }
+    #loadingScreen::after {
+      content: ''; position: absolute; top: 24px; left: 24px; right: 24px; bottom: 24px;
+      border: 1px solid rgba(212, 175, 55, 0.25); pointer-events: none;
+    }
 
-        @keyframes waveAnimation {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
+    .splash-subtitle {
+      font-family: var(--font-en); font-size: 1rem; letter-spacing: 0.45em;
+      color: var(--primary-gold); text-transform: uppercase; margin-bottom: 16px; font-weight: 400; opacity: 0.9;
+    }
+    .splash-title {
+      font-family: var(--font-jp); font-size: 3.4rem; letter-spacing: 0.15em;
+      color: #ffffff; margin-bottom: 20px; font-weight: 400;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.8); display: flex; justify-content: center;
+    }
+    .splash-title span {
+      display: inline-block; animation: waveAnimation 3.5s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.1s);
+    }
+    @keyframes waveAnimation {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .splash-date {
+      font-family: var(--font-en); font-size: 1.25rem; letter-spacing: 0.3em;
+      color: #e6c567; font-weight: 300; opacity: 0.95;
+    }
 
-        .splash-date {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
-            letter-spacing: 0.3em;
-            color: #e6c567;
-            font-weight: 300;
-            opacity: 0.95;
-        }
+    .loading-indicator {
+      position: absolute; bottom: 45px; right: 45px;
+      background: rgba(20, 18, 16, 0.65); backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(212, 175, 55, 0.35);
+      color: #fcfbfa; padding: 10px 22px; border-radius: 30px;
+      font-size: 0.9rem; letter-spacing: 0.12em; display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .spinner {
+      width: 14px; height: 14px; border: 2px solid rgba(212, 175, 55, 0.3);
+      border-top-color: var(--primary-gold); border-radius: 50%; animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-        .loading-indicator {
-            position: absolute;
-            bottom: 45px;
-            right: 45px;
-            background: rgba(20, 18, 16, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(212, 175, 55, 0.35);
-            color: #fcfbfa;
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            letter-spacing: 0.12em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
+    /* スライドショーエリア */
+    .stage-container {
+      width: 100%; height: 100%; position: relative;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .bg-blur {
+      position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
+      background-size: cover; background-position: center;
+      filter: blur(25px) brightness(0.45); transform: scale(1.1);
+      z-index: 1; opacity: 0; transition: opacity 1.5s ease-in-out;
+    }
+    .bg-blur.active { opacity: 1; }
 
-        .spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-top-color: #d4af37;
-            border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+    .slide-image {
+      max-width: 95%; max-height: 95%; object-fit: contain;
+      position: absolute; z-index: 2; opacity: 0; transform: scale(0.95);
+      transition: opacity 1.5s ease-in-out, transform 5.5s cubic-bezier(0.25, 1, 0.5, 1);
+      border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+    .slide-image.active { opacity: 1; transform: scale(1.03); }
 
-        .slide-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    /* 💍 ラグジュアリーな吹き出しコメントデザイン */
+    .comment-overlay {
+      position: absolute; bottom: -140px; left: 72%; transform: translateX(-50%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(250, 247, 242, 0.94));
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 2px solid rgba(212, 175, 55, 0.6); color: #2c2a29;
+      padding: 28px 44px 28px 36px; border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.95), 0 0 15px rgba(212, 175, 55, 0.2);
+      max-width: 340px; text-align: left; z-index: 30; opacity: 0; pointer-events: none;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .comment-overlay::before {
+      content: ''; position: absolute; bottom: -14px; left: 38px;
+      border-width: 14px 11px 0 11px; border-style: solid;
+      border-color: rgba(255, 255, 255, 0.96) transparent; display: block; width: 0;
+    }
+    .comment-overlay::after {
+      content: ''; position: absolute; bottom: -18px; left: 37px;
+      border-width: 16px 12px 0 12px; border-style: solid;
+      border-color: rgba(212, 175, 55, 0.6) transparent; display: block; width: 0; z-index: -1;
+    }
+    .comment-heart {
+      position: absolute; bottom: 16px; right: 22px; font-size: 1.3rem; color: var(--primary-gold);
+      animation: heartPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 12px rgba(212, 175, 55, 0.7); }
+    }
+    .comment-overlay.animate-stream-comment {
+      animation: weddingCommentAscent 10s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes weddingCommentAscent {
+      0% { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.92); }
+      12% { opacity: 1; transform: translateX(-50%) translateY(-30px) scale(1); }
+      80% { opacity: 1; transform: translateX(-50%) translateY(-420px) scale(1); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-520px) scale(0.95); }
+    }
+    .comment-author {
+      font-family: var(--font-en); font-size: 1.05rem; letter-spacing: 0.2em;
+      color: #9a7b38; text-transform: uppercase; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .comment-author::before { content: '✨'; font-size: 0.85rem; }
+    .comment-text {
+      font-size: 1.2rem; letter-spacing: 0.05em; line-height: 1.6;
+      color: #2c2a29; font-weight: 400; padding-right: 25px;
+    }
 
-        .bg-blur {
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background-size: cover;
-            background-position: center;
-            filter: blur(25px) brightness(0.45);
-            transform: scale(1.1);
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
-        }
-        .bg-blur.active {
-            opacity: 1;
-        }
-
-        img.slide-img {
-            max-width: 95%;
-            max-height: 95%;
-            object-fit: contain;
-            position: absolute;
-            z-index: 2;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 1.5s ease-in-out, transform 4.5s cubic-bezier(0.25, 1, 0.5, 1);
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-        }
-        img.slide-img.active {
-            opacity: 1;
-            transform: scale(1.03);
-        }
-
-        /* 💬 おしゃれ＆かわいい明るい吹き出し（配置を「右3分の1」エリアに変更） */
-        .comment-overlay {
-            position: absolute;
-            bottom: -130px;
-            /* 画面を3分割した右側（右3分の1）のエリアに配置 */
-            left: 72%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1.5px solid rgba(212, 175, 55, 0.5);
-            color: #2c2a29;
-            padding: 24px 42px 24px 32px;
-            border-radius: 24px;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.9);
-            max-width: 320px; /* 右側で収まりの良いサイズ感に調整 */
-            text-align: left;
-            z-index: 30;
-            opacity: 0;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        /* 吹き出しのしっぽ（左側に配置して自然に） */
-        .comment-overlay::before {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 35px;
-            border-width: 12px 10px 0 10px;
-            border-style: solid;
-            border-color: rgba(255, 255, 255, 0.95) transparent;
-            display: block;
-            width: 0;
-        }
-        .comment-overlay::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 34px;
-            border-width: 13px 11px 0 11px;
-            border-style: solid;
-            border-color: rgba(212, 175, 55, 0.5) transparent;
-            display: block;
-            width: 0;
-            z-index: -1;
-        }
-
-        /* 💖 右下に配置するきらめくハート */
-        .comment-heart {
-            position: absolute;
-            bottom: 14px;
-            right: 20px;
-            font-size: 1.2rem;
-            color: #e65c9c;
-            animation: heartPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 10px rgba(230, 92, 156, 0.6); }
-        }
-
-        /* 🚀 右側エリアで下から上へ昇っていくアニメーション */
-        .comment-overlay.animate-stream-comment {
-            animation: sweetCommentAscentRight 9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        @keyframes sweetCommentAscentRight {
-            0% { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.92); }
-            15% { opacity: 1; transform: translateX(-50%) translateY(-40px) scale(1); }
-            75% { opacity: 1; transform: translateX(-50%) translateY(-450px) scale(1); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-560px) scale(0.96); }
-        }
-
-        .comment-author {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            letter-spacing: 0.18em;
-            color: #b89753;
-            text-transform: uppercase;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .comment-author::before {
-            content: '💐';
-            font-size: 0.9rem;
-        }
-
-        .comment-text {
-            font-size: 1.25rem;
-            letter-spacing: 0.06em;
-            line-height: 1.55;
-            color: #332f2b;
-            font-weight: 400;
-            padding-right: 25px;
-        }
-    </style>
+    .signage-footer {
+      position: absolute; bottom: 25px; left: 40px; z-index: 10;
+      color: rgba(255,255,255,0.8); font-family: var(--font-en);
+      letter-spacing: 0.2em; font-size: 1.1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 🚪 起動画面（元のダークラグジュアリーUI） -->
-    <div id="loadingScreen">
-        <div class="splash-subtitle">REAL-TIME PHOTO & MESSAGE SYNC</div>
-        <div class="splash-title" id="waveTitle"></div>
-        <div class="splash-date">October 25, 2026</div>
+  <!-- 🚪 起動画面 -->
+  <div id="loadingScreen">
+    <div class="splash-subtitle">REAL-TIME PHOTO & MESSAGE SYNC</div>
+    <div class="splash-title" id="waveTitle"></div>
+    <div class="splash-date">October 25, 2026</div>
 
-        <div class="loading-indicator">
-            <div class="spinner"></div>
-            <span id="loadingText">システム接続中...</span>
-        </div>
+    <div class="loading-indicator">
+      <div class="spinner"></div>
+      <span id="loadingText">システム接続中...</span>
     </div>
+  </div>
 
-    <div class="slide-container" id="slideContainer"></div>
+  <div class="stage-container" id="slideContainer">
+    <div class="bg-blur" id="bg-blur-1"></div>
+    <div class="bg-blur" id="bg-blur-2"></div>
+    <img id="slide-img-1" class="slide-image" alt="Slide 1">
+    <img id="slide-img-2" class="slide-image" alt="Slide 2">
+  </div>
 
-    <script>
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec"; // ★デプロイしたGASのURL
-        const FIREBASE_DB_URL = "https://signageresource-syncsystem-default-rtdb.firebaseio.com/trigger.json";
+  <div class="signage-footer">
+    <span>L'Éternel Moment — Share the Moments</span>
+  </div>
 
-        let images = [];
-        let currentIndex = 0;
-        let blurEl1, blurEl2, imgElement1, imgElement2;
-        let useFirstImage = true;
-        let slideTimer = null;
-        let lastKnownTimestamp = null;
-        let isFirstLoad = true;
+  <script>
+    // =====================================================================
+    // ⚙️ 【管理者向け設定エリア】自環境に合わせて以下を変更してください
+    // =====================================================================
+    const CONFIG = {
+      // 1. Firebase Realtime Database のURL
+      FIREBASE_DATABASE_URL: "https://signageresource-syncsystem-default-rtdb.firebaseio.com/",
+      
+      // 2. 写真リストを取得するGAS (Google Apps Script) のWebアプリURL
+      GAS_SYNC_API_URL: "https://script.google.com/macros/s/AKfycbz4XPN95bV-owJeowXFzQ9Z0OIBgI6S31C8QqvX7TdCAas6ZRYes8itFWDy9wSJB6fVhg/exec",
+      
+      // 3. 通常のスライド切り替え間隔（5秒 = 5000ms）
+      NORMAL_SLIDE_INTERVAL: 5000
+    };
+    // =====================================================================
 
-        const SHOWN_BATCHES_KEY = "wedding_shown_batches_v5";
-        const memoryShownBatches = new Set();
+    // 状態管理変数
+    let images = [];
+    let currentIndex = 0;
+    let useFirstImage = true;
+    let slideTimer = null;
+    let isFirstLoad = true;
 
-        window.onload = async function() {
-            const titleText = "L'Éternel Moment";
-            const titleContainer = document.getElementById('waveTitle');
-            titleContainer.innerHTML = '';
-            for (let i = 0; i < titleText.length; i++) {
-                const span = document.createElement('span');
-                span.style.setProperty('--i', i);
-                span.textContent = titleText[i] === ' ' ? '\u00A0' : titleText[i];
-                titleContainer.appendChild(span);
-            }
+    const SHOWN_BATCHES_KEY = "wedding_shown_batches_v7";
+    const memoryShownBatches = new Set();
 
-            const container = document.getElementById('slideContainer');
-            
-            blurEl1 = document.createElement('div');
-            blurEl1.className = 'bg-blur';
-            blurEl2 = document.createElement('div');
-            blurEl2.className = 'bg-blur';
-            container.appendChild(blurEl1);
-            container.appendChild(blurEl2);
+    // Firebase 初期化
+    firebase.initializeApp({ databaseURL: CONFIG.FIREBASE_DATABASE_URL });
+    const db = firebase.database();
 
-            imgElement1 = document.createElement('img');
-            imgElement1.className = 'slide-img';
-            imgElement2 = document.createElement('img');
-            imgElement2.className = 'slide-img';
-            container.appendChild(imgElement1);
-            container.appendChild(imgElement2);
+    window.addEventListener('DOMContentLoaded', async () => {
+      // タイトル文字のアニメーション生成
+      initWaveTitle("L'Éternel Moment");
 
-            fetchImagesAndRefresh(true);
+      // 初回データ取得 ＆ 描画・スプラッシュ終了
+      await fetchImagesAndRefresh(true, false);
 
-            slideTimer = setInterval(nextSlide, 4000);
-            setInterval(checkFirebaseTrigger, 2000);
-        };
+      // スライドショーのタイマー開始（5秒ごと）
+      slideTimer = setInterval(nextSlide, CONFIG.NORMAL_SLIDE_INTERVAL);
 
-        async function checkFirebaseTrigger() {
-            try {
-                const response = await fetch(FIREBASE_DB_URL);
-                const data = await response.json();
-                
-                if (data && data.timestamp) {
-                    if (lastKnownTimestamp === null) {
-                        lastKnownTimestamp = data.timestamp;
-                    } else if (data.timestamp > lastKnownTimestamp) {
-                        console.log('✨ 新着写真を検知！即時割り込み同期を実行します');
-                        lastKnownTimestamp = data.timestamp;
-                        
-                        await fetchImagesAndRefresh(false, true);
+      // Firebase によるリアルタイム新着監視（WebSocketリスナー）
+      initFirebaseListener();
+    });
 
-                        clearInterval(slideTimer);
-                        slideTimer = setInterval(nextSlide, 4000);
-                    }
-                }
-            } catch (e) {
-                console.error('Firebase確認エラー:', e);
-            }
+    // タイトル文字のバラシ＆アニメーション用Span生成
+    function initWaveTitle(titleText) {
+      const titleContainer = document.getElementById('waveTitle');
+      titleContainer.innerHTML = '';
+      for (let i = 0; i < titleText.length; i++) {
+        const span = document.createElement('span');
+        span.style.setProperty('--i', i);
+        span.textContent = titleText[i] === ' ' ? '\u00A0' : titleText[i];
+        titleContainer.appendChild(span);
+      }
+    }
+
+    // 1. Firebaseからのリアルタイム新着検知
+    function initFirebaseListener() {
+      // データベースのトリガーや新着ノードを監視
+      const triggerRef = db.ref('trigger');
+      triggerRef.on('value', async (snapshot) => {
+        const data = snapshot.val();
+        if (data && data.timestamp) {
+          console.log('✨ 新着写真を検知！即時割り込み同期を実行します');
+          // 最新データを取得して割り込み表示
+          await fetchImagesAndRefresh(false, true);
+
+          // タイマーをリセットして5秒間隔を維持
+          clearInterval(slideTimer);
+          slideTimer = setInterval(nextSlide, CONFIG.NORMAL_SLIDE_INTERVAL);
         }
+      });
+    }
 
-        function organizeImages(rawImages, isInterrupt = false) {
-            const batchMap = {};
-            rawImages.forEach(img => {
-                const bId = img.batchId || "default";
-                if (!batchMap[bId]) batchMap[bId] = [];
-                batchMap[bId].push(img);
-            });
+    // 2. 画像リストの整理とバッチ優先順位付け
+    function organizeImages(rawImages, isInterrupt = false) {
+      const batchMap = {};
+      rawImages.forEach(img => {
+        const bId = img.batchId || "default";
+        if (!batchMap[bId]) batchMap[bId] = [];
+        batchMap[bId].push(img);
+      });
 
-            Object.keys(batchMap).forEach(bId => {
-                batchMap[bId].sort((a, b) => a.createdTime - b.createdTime);
-            });
+      Object.keys(batchMap).forEach(bId => {
+        batchMap[bId].sort((a, b) => (a.createdTime || 0) - (b.createdTime || 0));
+      });
 
-            let batchIds = Object.keys(batchMap);
-            batchIds.sort((a, b) => {
-                const maxTimeA = Math.max(...batchMap[a].map(img => img.createdTime));
-                const maxTimeB = Math.max(...batchMap[b].map(img => img.createdTime));
-                return maxTimeB - maxTimeA;
-            });
+      let batchIds = Object.keys(batchMap);
+      batchIds.sort((a, b) => {
+        const maxTimeA = Math.max(...batchMap[a].map(img => img.createdTime || 0));
+        const maxTimeB = Math.max(...batchMap[b].map(img => img.createdTime || 0));
+        return maxTimeB - maxTimeA;
+      });
 
-            let latestBatchId = batchIds[0];
-            let latestBatchImages = batchMap[latestBatchId] || [];
-            
-            let otherBatchIds = batchIds.filter(id => id !== latestBatchId);
-            for (let i = otherBatchIds.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [otherBatchIds[i], otherBatchIds[j]] = [otherBatchIds[j], otherBatchIds[i]];
-            }
+      let latestBatchId = batchIds[0];
+      let latestBatchImages = batchMap[latestBatchId] || [];
+      
+      let otherBatchIds = batchIds.filter(id => id !== latestBatchId);
+      for (let i = otherBatchIds.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [otherBatchIds[i], otherBatchIds[j]] = [otherBatchIds[j], otherBatchIds[i]];
+      }
 
-            let otherImages = otherBatchIds.flatMap(id => batchMap[id]);
+      let otherImages = otherBatchIds.flatMap(id => batchMap[id]);
 
-            if (isInterrupt) {
-                return [...latestBatchImages, ...otherImages];
-            } else {
-                let allBatches = batchIds.map(id => batchMap[id]);
-                for (let i = allBatches.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [allBatches[i], allBatches[j]] = [allBatches[j], allBatches[i]];
-                }
-                return allBatches.flat();
-            }
+      if (isInterrupt) {
+        // 割り込み時は最新バッチ（今回アップロードされた分）をすべて先頭に配置
+        return [...latestBatchImages, ...otherImages];
+      } else {
+        let allBatches = batchIds.map(id => batchMap[id]);
+        for (let i = allBatches.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [allBatches[i], allBatches[j]] = [allBatches[j], allBatches[i]];
         }
+        return allBatches.flat();
+      }
+    }
 
-        async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
-            try {
-                const response = await fetch(GAS_WEB_APP_URL, {
-                    method: "GET",
-                    redirect: "follow" 
-                });
+    // 3. GASからのデータ取得とリフレッシュ
+    async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
+      try {
+        const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
+          method: "GET",
+          redirect: "follow"
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.images.length > 0) {
+          images = organizeImages(data.images, isInterrupt);
 
-                const data = await response.json();
-                
-                if (data.status === 'success' && data.images.length > 0) {
-                    images = organizeImages(data.images, isInterrupt);
-
-                    if (isInitial || isInterrupt) {
-                        currentIndex = 0;
-                        showImage(currentIndex);
-
-                        if (isFirstLoad) {
-                            isFirstLoad = false;
-                            setTimeout(() => {
-                                const loadingScreen = document.getElementById('loadingScreen');
-                                loadingScreen.classList.add('fade-out');
-                                setTimeout(() => {
-                                    loadingScreen.style.display = 'none';
-                                }, 1800);
-                            }, 3500);
-                        }
-                    }
-                }
-            } catch (e) {
-                console.error('画像データ取得エラー:', e);
-            }
-        }
-
-        function isBatchAlreadyShown(batchId) {
-            if (memoryShownBatches.has(batchId)) return true;
-            try {
-                const shown = JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
-                if (shown.includes(batchId)) {
-                    memoryShownBatches.add(batchId);
-                    return true;
-                }
-            } catch (e) {}
-            return false;
-        }
-
-        function markBatchAsShown(batchId) {
-            memoryShownBatches.add(batchId);
-            try {
-                const shown = JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
-                if (!shown.includes(batchId)) {
-                    shown.push(batchId);
-                    localStorage.setItem(SHOWN_BATCHES_KEY, JSON.stringify(shown));
-                }
-            } catch (e) {}
-        }
-
-        function showImage(index) {
-            if (images.length === 0) return;
-            const currentItem = images[index];
-            const imageUrl = currentItem.url;
-            const message = currentItem.message;
-            const author = currentItem.author;
-            const batchId = currentItem.batchId || "default";
-
-            if (useFirstImage) {
-                blurEl1.style.backgroundImage = `url('${imageUrl}')`;
-                blurEl1.classList.add('active');
-                blurEl2.classList.remove('active');
-
-                imgElement1.src = imageUrl;
-                imgElement1.classList.add('active');
-                imgElement2.classList.remove('active');
-            } else {
-                blurEl2.style.backgroundImage = `url('${imageUrl}')`;
-                blurEl2.classList.add('active');
-                blurEl1.classList.remove('active');
-
-                imgElement2.src = imageUrl;
-                imgElement2.classList.add('active');
-                imgElement1.classList.remove('active');
-            }
-            useFirstImage = !useFirstImage;
-
-            const hasMessage = message && message.trim() !== "";
-            const isFirstTimeForBatch = hasMessage && !isBatchAlreadyShown(batchId);
-
-            if (isFirstTimeForBatch) {
-                markBatchAsShown(batchId);
-                triggerStreamComment(author, message);
-            }
-        }
-
-        function triggerStreamComment(author, message) {
-            const commentEl = document.createElement('div');
-            commentEl.className = 'comment-overlay';
-            commentEl.innerHTML = `
-                <div class="comment-author">${author ? `${author}` : 'Guest'}からのメッセージ✨</div>
-                <div class="comment-text">${message}</div>
-                <div class="comment-heart">♡</div>
-            `;
-            document.body.appendChild(commentEl);
-
-            commentEl.classList.add('animate-stream-comment');
-
-            setTimeout(() => {
-                commentEl.remove();
-            }, 9000);
-        }
-
-        function nextSlide() {
-            if (images.length === 0) return;
-            currentIndex = (currentIndex + 1) % images.length;
-            if (currentIndex === 0) {
-                images = organizeImages(images, false);
-            }
+          if (isInitial || isInterrupt) {
+            currentIndex = 0;
             showImage(currentIndex);
+
+            if (isFirstLoad) {
+              isFirstLoad = false;
+              setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                  loadingScreen.style.display = 'none';
+                }, 1800);
+              }, 3500);
+            }
+          }
         }
-    </script>
+      } catch (e) {
+        console.error('画像データ取得エラー:', e);
+      }
+    }
+
+    // 重複表示チェック用
+    function isBatchAlreadyShown(batchId) {
+      if (memoryShownBatches.has(batchId)) return true;
+      try {
+        const shown = JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
+        if (shown.includes(batchId)) {
+          memoryShownBatches.add(batchId);
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    function markBatchAsShown(batchId) {
+      memoryShownBatches.add(batchId);
+      try {
+        const shown = JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
+        if (!shown.includes(batchId)) {
+          shown.push(batchId);
+          localStorage.setItem(SHOWN_BATCHES_KEY, JSON.stringify(shown));
+        }
+      } catch (e) {}
+    }
+
+    // 4. 画像とメッセージの表示処理
+    function showImage(index) {
+      if (images.length === 0) return;
+      const currentItem = images[index];
+      const imageUrl = currentItem.url;
+      const message = currentItem.message;
+      const author = currentItem.author;
+      const batchId = currentItem.batchId || "default";
+
+      const blurEl1 = document.getElementById('bg-blur-1');
+      const blurEl2 = document.getElementById('bg-blur-2');
+      const imgEl1 = document.getElementById('slide-img-1');
+      const imgEl2 = document.getElementById('slide-img-2');
+
+      if (useFirstImage) {
+        blurEl1.style.backgroundImage = `url('${imageUrl}')`;
+        blurEl1.classList.add('active');
+        blurEl2.classList.remove('active');
+
+        imgEl1.src = imageUrl;
+        imgEl1.classList.add('active');
+        imgEl2.classList.remove('active');
+      } else {
+        blurEl2.style.backgroundImage = `url('${imageUrl}')`;
+        blurEl2.classList.add('active');
+        blurEl1.classList.remove('active');
+
+        imgEl2.src = imageUrl;
+        imgEl2.classList.add('active');
+        imgEl1.classList.remove('active');
+      }
+      useFirstImage = !useFirstImage;
+
+      // メッセージの吹き出し表示判定
+      const hasMessage = message && message.trim() !== "";
+      const isFirstTimeForBatch = hasMessage && !isBatchAlreadyShown(batchId);
+
+      if (isFirstTimeForBatch) {
+        markBatchAsShown(batchId);
+        triggerStreamComment(author, message);
+      }
+    }
+
+    // 5. 吹き出しアニメーションの実行
+    function triggerStreamComment(author, message) {
+      const commentEl = document.createElement('div');
+      commentEl.className = 'comment-overlay';
+      commentEl.innerHTML = `
+        <div class="comment-author">${author ? author : 'Guest'}からのメッセージ</div>
+        <div class="comment-text">${message}</div>
+        <div class="comment-heart">♡</div>
+      `;
+      document.body.appendChild(commentEl);
+
+      commentEl.classList.add('animate-stream-comment');
+
+      setTimeout(() => {
+        commentEl.remove();
+      }, 10000);
+    }
+
+    // 6. 定期スライド送り（次の画像へ）
+    function nextSlide() {
+      if (images.length === 0) return;
+      currentIndex = (currentIndex + 1) % images.length;
+      
+      // リストの最後まで行ったら再度ランダムを含めて循環させる
+      if (currentIndex === 0) {
+        images = organizeImages(images, false);
+      }
+      showImage(currentIndex);
+    }
+  </script>
 </body>
 </html>
