@@ -207,8 +207,35 @@
     let slideTimer = null;
     let isFirstLoad = true;
 
-    const SHOWN_BATCHES_KEY = "wedding_shown_batches_v7";
-    const memoryShownBatches = new Set();
+    // 🌟 同じメッセージが何度も表示されないようにするための管理キー
+    const SHOWN_MESSAGES_KEY = "wedding_shown_messages_v1";
+    const memoryShownMessages = new Set();
+
+    function isMessageAlreadyShown(author, message) {
+      const key = `${author}_${message}`;
+      if (memoryShownMessages.has(key)) return true;
+      try {
+        const shown = JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
+        if (shown.includes(key)) {
+          memoryShownMessages.add(key);
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    function markMessageAsShown(author, message) {
+      const key = `${author}_${message}`;
+      memoryShownMessages.add(key);
+      try {
+        const shown = JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
+        if (!shown.includes(key)) {
+          shown.push(key);
+          if (shown.length > 100) shown.shift(); // 履歴が増えすぎないように制限
+          localStorage.setItem(SHOWN_MESSAGES_KEY, JSON.stringify(shown));
+        }
+      } catch (e) {}
+    }
 
     // Firebase 初期化
     firebase.initializeApp({ databaseURL: CONFIG.FIREBASE_DATABASE_URL });
@@ -242,16 +269,13 @@
 
     // 1. Firebaseからのリアルタイム新着検知
     function initFirebaseListener() {
-      // データベースのトリガーや新着ノードを監視
       const triggerRef = db.ref('trigger');
       triggerRef.on('value', async (snapshot) => {
         const data = snapshot.val();
         if (data && data.timestamp) {
           console.log('✨ 新着写真を検知！即時割り込み同期を実行します');
-          // 最新データを取得して割り込み表示
           await fetchImagesAndRefresh(false, true);
 
-          // タイマーをリセットして5秒間隔を維持
           clearInterval(slideTimer);
           slideTimer = setInterval(nextSlide, CONFIG.NORMAL_SLIDE_INTERVAL);
         }
@@ -290,7 +314,6 @@
       let otherImages = otherBatchIds.flatMap(id => batchMap[id]);
 
       if (isInterrupt) {
-        // 割り込み時は最新バッチ（今回アップロードされた分）をすべて先頭に配置
         return [...latestBatchImages, ...otherImages];
       } else {
         let allBatches = batchIds.map(id => batchMap[id]);
@@ -335,30 +358,6 @@
       }
     }
 
-    // 重複表示チェック用
-    function isBatchAlreadyShown(batchId) {
-      if (memoryShownBatches.has(batchId)) return true;
-      try {
-        const shown = JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
-        if (shown.includes(batchId)) {
-          memoryShownBatches.add(batchId);
-          return true;
-        }
-      } catch (e) {}
-      return false;
-    }
-
-    function markBatchAsShown(batchId) {
-      memoryShownBatches.add(batchId);
-      try {
-        const shown = JSON.parse(localStorage.getItem(SHOWN_BATCHES_KEY) || '[]');
-        if (!shown.includes(batchId)) {
-          shown.push(batchId);
-          localStorage.setItem(SHOWN_BATCHES_KEY, JSON.stringify(shown));
-        }
-      } catch (e) {}
-    }
-
     // 4. 画像とメッセージの表示処理
     function showImage(index) {
       if (images.length === 0) return;
@@ -366,7 +365,6 @@
       const imageUrl = currentItem.url;
       const message = currentItem.message;
       const author = currentItem.author;
-      const batchId = currentItem.batchId || "default";
 
       const blurEl1 = document.getElementById('bg-blur-1');
       const blurEl2 = document.getElementById('bg-blur-2');
@@ -392,12 +390,12 @@
       }
       useFirstImage = !useFirstImage;
 
-      // メッセージの吹き出し表示判定
+      // 🌟 メッセージの吹き出し表示判定（同じメッセージは全体で1回のみ表示）
       const hasMessage = message && message.trim() !== "";
-      const isFirstTimeForBatch = hasMessage && !isBatchAlreadyShown(batchId);
+      const isFirstTimeForMessage = hasMessage && !isMessageAlreadyShown(author, message);
 
-      if (isFirstTimeForBatch) {
-        markBatchAsShown(batchId);
+      if (isFirstTimeForMessage) {
+        markMessageAsShown(author, message);
         triggerStreamComment(author, message);
       }
     }
@@ -425,7 +423,6 @@
       if (images.length === 0) return;
       currentIndex = (currentIndex + 1) % images.length;
       
-      // リストの最後まで行ったら再度ランダムを含めて循環させる
       if (currentIndex === 0) {
         images = organizeImages(images, false);
       }
